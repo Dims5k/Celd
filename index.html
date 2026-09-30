@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Examen blanc CE1D maths et sciences pour la 2e secondaire (Fédération Wallonie-Bruxelles). Nouvelles questions à chaque examen.">
+<style>html{color-scheme:light}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Examen blanc CE1D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout : une feuille de cahier quadrillé ; une question par feuille ; la correction arrive au stylo rouge. */
+:root{
+  --paper:#F7F9FB; --grid:#DCE6F0; --card:#FFFFFF; --fg:#1F242D; --muted:#5B6574; --line:#C9D3DE;
+  --ink:#1D43A8; --ink-soft:#E3EAFB; --red:#C4302A; --red-soft:#FBE7E5; --ok:#1E7A45; --ok-soft:#E1F3E8; --hl:#F4DC5B;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-hand:"Caveat", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#12161D; --grid:#1C2330; --card:#181E27; --fg:#E6EAF0; --muted:#98A3B3; --line:#2E3847;
+  --ink:#8FB0FF; --ink-soft:#1E2A45; --red:#FF7B70; --red-soft:#3A1F1E; --ok:#6FD39A; --ok-soft:#173226; --hl:#E8C93A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12161D; --grid:#1C2330; --card:#181E27; --fg:#E6EAF0; --muted:#98A3B3; --line:#2E3847;
+  --ink:#8FB0FF; --ink-soft:#1E2A45; --red:#FF7B70; --red-soft:#3A1F1E; --ok:#6FD39A; --ok-soft:#173226; --hl:#E8C93A; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;padding-inline:16px;padding-block:0 48px;min-height:100vh}
+.wrap{max-width:860px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* barre du haut */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:2px solid var(--fg);
+  display:flex;align-items:center;gap:12px;padding-block:12px;margin-bottom:24px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-weight:800;font-size:20px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px}
+.brand small{font-family:var(--f-body);font-weight:400;font-size:13px;color:var(--muted);letter-spacing:.02em}
+.top .spacer{flex:1}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:3px 10px;border:1.5px solid var(--line);border-radius:999px;background:var(--card);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip.ink{border-color:var(--ink);color:var(--ink)}
+
+/* boutons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--fg);background:var(--card);padding:10px 18px;border-radius:10px;font-weight:700;min-height:46px}
+.btn:hover{background:var(--ink-soft)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--card)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{border-color:var(--line)}
+.btn.small{padding:6px 12px;min-height:36px;font-size:15px;border-width:1.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* accueil */
+.hero{display:grid;gap:10px;margin-bottom:28px}
+.hero h1{font-size:clamp(34px,6vw,54px);font-weight:800;letter-spacing:-.02em}
+.hero h1 mark{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;padding:0 4px}
+.hero p{margin:0;color:var(--muted);max-width:60ch}
+.label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 10px}
+.subjects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.subj{text-align:left;border:2px solid var(--line);background:var(--card);border-radius:12px;padding:16px;display:grid;gap:6px;min-width:0}
+.subj b{font-family:var(--f-display);font-size:21px}
+.subj span{font-size:14px;color:var(--muted)}
+.subj[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);background:var(--ink-soft)}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);flex-wrap:wrap}
+.seg button{border:0;background:none;padding:9px 16px;font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.startrow{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:34px}
+.cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px}
+.panel{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+.panel h2{font-size:19px;margin-bottom:12px}
+.hist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.hist li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding-bottom:8px;border-bottom:1px dashed var(--line)}
+.hist li:last-child{border-bottom:0}
+.hist .s{font-family:var(--f-hand);font-size:26px;color:var(--red);line-height:1;grid-row:span 2;align-self:center}
+.hist small{color:var(--muted)}
+.empty{color:var(--muted);font-size:15px;margin:0}
+.bar{height:10px;border-radius:5px;background:var(--grid);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink)}
+.bar.low i{background:var(--red)}
+.themes{display:grid;gap:10px}
+.themes .row{display:grid;grid-template-columns:minmax(0,1fr) 54px;gap:4px 10px;align-items:center;font-size:15px}
+.themes .row .bar{grid-column:1 / -1}
+.themes .row em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.note{font-size:14px;color:var(--muted);margin-top:18px}
+.note a{color:var(--ink)}
+.resume{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--hl);color:#1F242D;border-radius:12px;padding:12px 16px;margin-bottom:22px;font-weight:700}
+.resume .btn{border-color:#1F242D;background:#fff;color:#1F242D}
+
+/* examen */
+.sheet{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:22px;position:relative;min-width:0}
+.qhead{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.qnum{font-family:var(--f-display);font-weight:800;font-size:26px;letter-spacing:-.01em}
+.qnum small{font-size:15px;color:var(--muted);font-weight:600}
+.qhead .spacer{flex:1}
+.prompt{font-size:18px;max-width:68ch}
+.prompt p{margin:0 0 10px}
+.prompt .expr{font-size:21px;font-variant-numeric:tabular-nums;background:var(--ink-soft);border-radius:8px;padding:8px 14px;display:inline-block;margin:4px 0 8px;letter-spacing:.01em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.05;margin:0 2px;font-size:.92em}
+.frac > span:first-child{border-bottom:1.5px solid currentColor;padding:0 3px}
+.frac > span:last-child{padding:0 3px}
+table.doc{border-collapse:collapse;margin:6px 0 12px;font-size:16px;font-variant-numeric:tabular-nums}
+table.doc th,table.doc td{border:1.5px solid var(--line);padding:6px 12px;text-align:center}
+table.doc th{background:var(--ink-soft);font-weight:700}
+.tablewrap{overflow-x:auto;max-width:100%}
+.fig{margin:6px 0 14px;max-width:100%}
+.fig svg{max-width:100%;height:auto;display:block}
+.fig .s{stroke:var(--fg);stroke-width:2;fill:none}
+.fig .f{fill:var(--ink-soft);stroke:var(--fg);stroke-width:2}
+.fig .d{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:5 4;fill:none}
+.fig .g{stroke:var(--grid);stroke-width:1}
+.fig .c{stroke:var(--ink);stroke-width:3;fill:none}
+.fig text{fill:var(--fg);font-family:var(--f-body);font-size:15px}
+.fig text.m{fill:var(--muted);font-size:12px}
+.fig text.u{fill:var(--red);font-weight:700}
+.answer{margin-top:18px;display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;background:var(--card);cursor:pointer}
+.opt:hover{border-color:var(--ink)}
+.opt input{margin-top:5px;accent-color:var(--ink);width:18px;height:18px;flex:none}
+.opt.on{border-color:var(--ink);background:var(--ink-soft)}
+.field{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.field label{min-width:0;font-weight:700}
+.field input{border:none;border-bottom:2px solid var(--ink);background:transparent;padding:6px 4px;font-size:20px;color:var(--ink);width:min(260px,100%);font-variant-numeric:tabular-nums}
+.field input.wide{width:min(420px,100%)}
+.field .suf{color:var(--muted)}
+.hint{font-size:14px;color:var(--muted);margin:0}
+.match{display:grid;gap:8px}
+.match .mrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;border-bottom:1px dashed var(--line);padding-bottom:8px}
+select{border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--card);width:100%}
+.order{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.order li{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--card)}
+.order li .n{font-family:var(--f-display);font-weight:800;color:var(--ink);width:22px;text-align:center}
+.order li .t{flex:1;min-width:0}
+.order li button{border:1.5px solid var(--line);background:var(--card);border-radius:8px;width:38px;height:36px;display:grid;place-items:center}
+textarea{width:100%;min-height:170px;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--card);line-height:1.6;resize:vertical;
+  background-image:linear-gradient(transparent calc(1.6em - 1px),var(--grid) 1px);background-size:100% 1.6em;background-attachment:local}
+.nav{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:22px;flex-wrap:wrap}
+.dots{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.dot{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.dot.done{background:var(--ink-soft);border-color:var(--ink);color:var(--ink)}
+.dot.cur{outline:3px solid var(--fg);outline-offset:1px}
+.listen{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px;font-size:14px;display:inline-flex;gap:6px;align-items:center}
+.confirm{margin-top:18px;border:2px solid var(--red);border-radius:12px;padding:16px;background:var(--red-soft);display:grid;gap:12px}
+
+/* résultats */
+.score{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px 26px;align-items:center;margin-bottom:24px}
+.bigscore{font-family:var(--f-hand);color:var(--red);font-size:clamp(64px,12vw,96px);line-height:.9;transform:rotate(-4deg);padding:6px 10px;border:3px solid var(--red);border-radius:50% 46% 52% 44%;text-align:center;min-width:150px}
+.bigscore small{display:block;font-size:.34em}
+.verdict h2{font-size:26px;margin-bottom:6px}
+.verdict p{margin:0;color:var(--muted)}
+.status{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:10px;background:var(--ink-soft);margin-bottom:18px;font-size:15px}
+.spin{width:16px;height:16px;border-radius:50%;border:2.5px solid var(--ink);border-right-color:transparent;animation:sp 1s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+.review{display:grid;gap:14px;margin-top:22px}
+.rq{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:10px;min-width:0}
+.rq.bad{border-left:5px solid var(--red)}
+.rq.good{border-left:5px solid var(--ok)}
+.rq.part{border-left:5px solid var(--hl)}
+.rq .top2{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.rq .pts{font-family:var(--f-hand);font-size:28px;color:var(--red);line-height:1;margin-left:auto}
+.rq .prompt{font-size:16px}
+.rq .prompt .expr{font-size:17px}
+.ans{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.ans > div{border-radius:10px;padding:10px 12px;min-width:0;overflow-wrap:anywhere}
+.ans .mine{background:var(--paper);border:1px solid var(--line)}
+.ans .right{background:var(--ok-soft)}
+.ans h4{margin:0 0 4px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ans ul{margin:0;padding-left:18px}
+.redpen{font-family:var(--f-hand);color:var(--red);font-size:23px;line-height:1.25;margin:0}
+.explain{font-size:15px;color:var(--fg);background:var(--paper);border-radius:10px;padding:10px 12px}
+.explain b{color:var(--ink)}
+.ai{font-size:15px;white-space:pre-wrap;border-left:3px solid var(--ink);padding:6px 12px;margin:0}
+.self{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:15px}
+.self button[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.ok{color:var(--ok);font-weight:700}.ko{color:var(--red);font-weight:700}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
+@media (max-width:720px){
+  .subjects{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr}
+  .sheet{padding:16px}
+  .ans{grid-template-columns:1fr}
+  .score{grid-template-columns:1fr;justify-items:start}
+  .match .mrow{grid-template-columns:1fr}
+  body{font-size:16px}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Examen blanc CE1D <small>2e secondaire</small></div>
+    <div class="spacer"></div>
+    <div id="topinfo" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  </header>
+  <main id="app"></main>
+</div>
+
+<script>
+(() => {
+"use strict";
+/* ============ utilitaires ============ */
+const $ = (s, r = document) => r.querySelector(s);
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const nz = (a, b) => { let n; do n = ri(a, b); while (n === 0); return n; };
+const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const MIN = "−";
+function fmt(n, dec = 2) {
+  const p = Math.pow(10, dec); let v = Math.round(n * p) / p; if (Object.is(v, -0)) v = 0;
+  let s = String(Math.abs(v)).replace(".", ",");
+  const [i, d] = s.split(","); const ii = i.length > 4 ? i.replace(/\B(?=(\d{3})+(?!\d))/g, " ") : i;
+  s = d ? ii + "," + d : ii;
+  return (v < 0 ? MIN : "") + s;
+}
+const rel = n => n < 0 ? "(" + fmt(n) + ")" : fmt(n);
+const frac = (a, b) => `<span class="frac"><span>${a}</span><span>${b}</span></span>`;
+const fracTxt = (n, d) => { if (d < 0) { n = -n; d = -d; } const g = gcd(n, d); n /= g; d /= g; return d === 1 ? fmt(n) : (n < 0 ? MIN : "") + Math.abs(n) + "/" + d; };
+const sup = { 2: "²", 3: "³" };
+function polyStr(terms, v = "x") { // terms: [[coef, pow], ...]
+  const t = terms.filter(([c]) => c !== 0).sort((a, b) => b[1] - a[1]);
+  if (!t.length) return "0";
+  return t.map(([c, p], i) => {
+    const neg = c < 0, a = Math.abs(c);
+    const body = p === 0 ? fmt(a) : (a === 1 ? "" : fmt(a)) + v + (p > 1 ? (sup[p] || "^" + p) : "");
+    return i === 0 ? (neg ? MIN : "") + body : (neg ? " " + MIN + " " : " + ") + body;
+  }).join("");
+}
+const signed = n => n < 0 ? " " + MIN + " " + fmt(-n) : " + " + fmt(n);
+let uid = 0; const gid = p => p + "-" + Date.now().toString(36) + "-" + (uid++);
+
+/* ============ lecture des réponses ============ */
+function norm(s) {
+  return String(s || "").trim().replace(/[−–—]/g, "-").replace(/,/g, ".").replace(/\s+/g, "")
+    .replace(/[×·]/g, "*").replace(/[÷:]/g, "/").replace(/²/g, "^2").replace(/³/g, "^3");
+}
+function parseNumber(s) {
+  let t = norm(s).replace(/^[a-z]=/i, "").replace(/[a-zé°%€³²]+$/i, "").replace(/(cm|dm|km|mm|m|l|ml|g|kg|min|s|h)(\^\d)?$/i, "");
+  if (!t) return NaN;
+  let m = t.match(/^(-?\d*\.?\d+)\/(-?\d*\.?\d+)$/);
+  if (m) return Number(m[1]) / Number(m[2]);
+  if (/^[-+]?\d*\.?\d+$/.test(t)) return Number(t);
+  return NaN;
+}
+function parseSci(s) {
+  const t = norm(s).replace(/⁻/g, "-").replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/g, c => "⁰¹²³⁴⁵⁶⁷⁸⁹".indexOf(c));
+  const m = t.match(/^(-?\d+(?:\.\d+)?)(?:\*|x|\.)10\^?\(?(-?\d+)\)?$/i);
+  if (!m) return null;
+  return { mant: Number(m[1]), exp: Number(m[2]), val: Number(m[1]) * Math.pow(10, Number(m[2])) };
+}
+// mini-analyseur d'expressions littérales (une variable)
+function parseExpr(src, v) {
+  const s = norm(src).replace(/\^\(?(-?\d+)\)?/g, "^$1").toLowerCase();
+  const toks = []; let i = 0;
+  while (i < s.length) {
+    const c = s[i];
+    if (/[\d.]/.test(c)) { let j = i; while (j < s.length && /[\d.]/.test(s[j])) j++; toks.push({ t: "n", v: Number(s.slice(i, j)) }); i = j; continue; }
+    if (c === v) { toks.push({ t: "v" }); i++; continue; }
+    if ("+-*/^()".includes(c)) { toks.push({ t: c }); i++; continue; }
+    throw new Error("car");
+  }
+  const T = []; // multiplication implicite
+  toks.forEach((k, idx) => {
+    const p = T[T.length - 1];
+    if (p && (p.t === "n" || p.t === "v" || p.t === ")") && (k.t === "v" || k.t === "(" || (k.t === "n" && p.t !== "n"))) T.push({ t: "*" });
+    T.push(k);
+  });
+  let p = 0; const peek = () => T[p], eat = t => { if (T[p] && T[p].t === t) { p++; return true; } return false; };
+  function expr() { const kids = [{ s: 1, n: term() }]; for (;;) { if (eat("+")) kids.push({ s: 1, n: term() }); else if (eat("-")) kids.push({ s: -1, n: term() }); else break; } return kids.length === 1 && kids[0].s === 1 ? kids[0].n : { k: "add", kids }; }
+  function term() { const kids = [{ op: "*", n: unary() }]; for (;;) { if (eat("*")) kids.push({ op: "*", n: unary() }); else if (eat("/")) kids.push({ op: "/", n: unary() }); else break; } return kids.length === 1 ? kids[0].n : { k: "mul", kids }; }
+  function unary() { if (eat("-")) return { k: "neg", a: unary() }; if (eat("+")) return unary(); return power(); }
+  function power() { const b = atom(); if (eat("^")) return { k: "pow", b, e: unary() }; return b; }
+  function atom() { const k = peek(); if (!k) throw new Error("fin"); if (k.t === "n") { p++; return { k: "num", v: k.v }; } if (k.t === "v") { p++; return { k: "var" }; } if (eat("(")) { const e = expr(); if (!eat(")")) throw new Error(")"); return { k: "par", a: e }; } throw new Error("tok"); }
+  const tree = expr(); if (p !== T.length) throw new Error("reste");
+  return tree;
+}
+function evalT(n, x) {
+  switch (n.k) {
+    case "num": return n.v; case "var": return x; case "par": return evalT(n.a, x); case "neg": return -evalT(n.a, x);
+    case "pow": return Math.pow(evalT(n.b, x), evalT(n.e, x));
+    case "add": return n.kids.reduce((s, c) => s + c.s * evalT(c.n, x), 0);
+    case "mul": return n.kids.reduce((s, c) => c.op === "*" ? s * evalT(c.n, x) : s / evalT(c.n, x), 1);
+  }
+}
+const topTerms = n => n.k === "add" ? n.kids.length : 1;
+const hasPar = n => !n ? false : n.k === "par" ? true : n.k === "add" ? n.kids.some(c => hasPar(c.n)) : n.k === "mul" ? n.kids.some(c => hasPar(c.n)) : n.k === "neg" ? hasPar(n.a) : n.k === "pow" ? hasPar(n.b) : false;
+function polyEval(coeffs, x) { return coeffs.reduce((s, [c, p]) => s + c * Math.pow(x, p), 0); }
+
+function checkField(f, raw) {
+  const s = String(raw ?? "").trim(); if (!s) return false;
+  try {
+    if (f.kind === "num") { const v = parseNumber(s); if (isNaN(v)) return false; const tol = f.tol ?? 1e-9; return Math.abs(v - f.answer) <= tol + 1e-9; }
+    if (f.kind === "frac") {
+      const t = norm(s); const v = parseNumber(s); if (isNaN(v) || Math.abs(v - f.answer) > 1e-9) return false;
+      const m = t.match(/^(-?\d+)\/(-?\d+)$/); if (m) { const a = +m[1], b = +m[2]; return gcd(a, b) === 1 && Math.abs(b) !== 1; }
+      return Number.isInteger(f.answer) || /^-?\d+\.\d+$/.test(t) && !f.fracOnly;
+    }
+    if (f.kind === "sci") { const r = parseSci(s); if (!r) return false; return Math.abs(r.mant) >= 1 && Math.abs(r.mant) < 10 && Math.abs(r.val - f.answer) <= Math.abs(f.answer) * 1e-9; }
+    if (f.kind === "expr") {
+      const tree = parseExpr(s, f.v || "x");
+      for (const x of [1.37, -2.11, 0.53, 3.2]) { const a = evalT(tree, x), b = polyEval(f.coeffs, x); if (!isFinite(a) || Math.abs(a - b) > 1e-6 * Math.max(1, Math.abs(b))) return false; }
+      if (f.maxTerms && (topTerms(tree) > f.maxTerms || hasPar(tree))) return false;
+      if (f.factor) { if (tree.k !== "mul") return false; const nums = tree.kids.filter(c => c.n.k === "num").map(c => c.n.v); return nums.some(v => Math.abs(v) === f.factor) || tree.kids.some(c => c.n.k === "neg" && c.n.a.k === "num" && c.n.a.v === f.factor); }
+      return true;
+    }
+    if (f.kind === "text") { const t = s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim(); return f.accept.some(a => t === a); }
+  } catch (e) { return false; }
+  return false;
+}
+
+/* ============ figures SVG ============ */
+const svg = (w, h, body) => `<div class="fig"><svg viewBox="0 0 ${w} ${h}" width="${w}" role="img" aria-label="Figure">${body}</svg></div>`;
+function figRight(a, b, c) { // a: côté vertical, b: côté horizontal, c: hypoténuse (textes)
+  return svg(340, 230, `<polygon class="f" points="50,190 290,190 50,40"/>
+  <polyline class="s" points="50,172 68,172 68,190"/>
+  <text x="18" y="120">${a}</text><text x="160" y="215" text-anchor="middle">${b}</text><text x="185" y="105">${c}</text>
+  <text x="36" y="36" class="m">A</text><text x="36" y="208" class="m">B</text><text x="296" y="208" class="m">C</text>`);
+}
+function figTri(A, B, C) {
+  return svg(340, 230, `<polygon class="f" points="40,190 300,190 150,40"/>
+  <path class="s" d="M70 190 A30 30 0 0 0 64 172"/><path class="s" d="M270 190 A30 30 0 0 1 280 170"/><path class="s" d="M138 58 A22 22 0 0 0 166 60"/>
+  <text x="78" y="182">${A}</text><text x="226" y="182">${B}</text><text x="150" y="92" text-anchor="middle">${C}</text>`);
+}
+function figIso(top) {
+  return svg(340, 230, `<polygon class="f" points="60,190 280,190 170,40"/>
+  <line class="s" x1="110" y1="112" x2="122" y2="120"/><line class="s" x1="230" y1="112" x2="218" y2="120"/>
+  <path class="s" d="M156 60 A24 24 0 0 0 184 60"/>
+  <text x="170" y="96" text-anchor="middle">${top}</text><text x="92" y="182">?</text><text x="240" y="182" class="m">?</text>`);
+}
+function figTrap(B, b, h) {
+  return svg(340, 220, `<polygon class="f" points="40,180 300,180 230,60 100,60"/>
+  <line class="d" x1="100" y1="60" x2="100" y2="180"/><polyline class="s" points="100,168 112,168 112,180"/>
+  <text x="170" y="205" text-anchor="middle">${B}</text><text x="165" y="50" text-anchor="middle">${b}</text><text x="80" y="128" text-anchor="end">${h}</text>`);
+}
+function figCircle(r) {
+  return svg(240, 200, `<circle class="f" cx="120" cy="100" r="80"/><line class="s" x1="120" y1="100" x2="200" y2="100"/><circle cx="120" cy="100" r="3" style="fill:var(--fg)"/>
+  <text x="160" y="92" text-anchor="middle">${r}</text><text x="110" y="120" class="m">O</text>`);
+}
+function figCurve(T, t1, t2, labelTemps = true) {
+  const X = t => 60 + t * 12.5, lo = T - 40, Y = v => 180 - (v - lo) * 1.9;
+  let g = "";
+  for (let t = 0; t <= 20; t += 5) g += `<line class="g" x1="${X(t)}" y1="28" x2="${X(t)}" y2="180"/><text class="m" x="${X(t)}" y="198" text-anchor="middle">${t}</text>`;
+  for (let v = lo; v <= T + 40; v += 20) g += `<line class="g" x1="60" y1="${Y(v)}" x2="310" y2="${Y(v)}"/>${labelTemps ? `<text class="m" x="54" y="${Y(v) + 4}" text-anchor="end">${fmt(v)}</text>` : ""}`;
+  const pts = [[0, T - 34], [t1, T], [t2, T], [20, T + 32]].map(([t, v]) => X(t) + "," + Y(v)).join(" ");
+  return svg(330, 230, `${g}<line class="s" x1="60" y1="180" x2="315" y2="180"/><line class="s" x1="60" y1="185" x2="60" y2="22"/>
+  <polyline class="c" points="${pts}"/><text class="m" x="315" y="218" text-anchor="end">temps (min)</text><text class="m" x="8" y="16">température (°C)</text>`);
+}
+const table = (head, rows) => `<div class="tablewrap"><table class="doc"><tr>${head.map(h => `<th>${h}</th>`).join("")}</tr>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</table></div>`;
+
+/* ============ banque : MATHÉMATIQUES (générateurs → nombres nouveaux à chaque examen) ============ */
+const num1 = (label, answer, show, extra = {}) => ({ label, answer, show: show ?? fmt(answer), kind: "num", ...extra });
+const G = []; // {subject, theme, make}
+const addG = (subject, theme, make) => G.push({ subject, theme, make });
+
+addG("maths", "Nombres", () => {
+  const n = [nz(-15, 15), nz(-15, 15), nz(-15, 15), nz(-15, 15)], ops = [pick(["+", "−"]), pick(["+", "−"]), pick(["+", "−"])];
+  let s = fmt(n[0]), v = n[0]; ops.forEach((o, i) => { s += ` ${o} ${rel(n[i + 1])}`; v += o === "+" ? n[i + 1] : -n[i + 1]; });
+  return { type: "num", pts: 1, prompt: `<p>Calcule.</p><div class="expr">${s}</div>`, fields: [num1("=", v)],
+    explain: `Soustraire un nombre, c'est additionner son opposé. On regroupe ensuite les positifs et les négatifs : le résultat vaut <b>${fmt(v)}</b>.` };
+});
+addG("maths", "Nombres", () => {
+  const a = nz(-9, 9), b = nz(-9, 9), d = nz(-6, 6), q = nz(-8, 8), c = d * q, v = a * b - q;
+  return { type: "num", pts: 1, prompt: `<p>Calcule en respectant les priorités des opérations.</p><div class="expr">${fmt(a)} × ${rel(b)} ${MIN} ${rel(c)} : ${rel(d)}</div>`, fields: [num1("=", v)],
+    explain: `On effectue d'abord la multiplication et la division : ${fmt(a)} × ${rel(b)} = ${fmt(a * b)} et ${rel(c)} : ${rel(d)} = ${fmt(q)}. Puis ${fmt(a * b)} ${MIN} ${rel(q)} = <b>${fmt(v)}</b>.` };
+});
+addG("maths", "Nombres", () => {
+  const b = pick([2, 3, 4, 5, 6, 8, 9, 10, 12]), d = pick([3, 4, 5, 6, 8, 9, 10].filter(x => x !== b)), a = ri(1, b + 3), c = ri(1, d - 1), op = pick(["+", "−"]);
+  const N = op === "+" ? a * d + c * b : a * d - c * b, D = b * d, g = gcd(N, D);
+  const L = D / gcd(b, d) * 1;
+  return { type: "num", pts: 1.5, prompt: `<p>Calcule et donne la réponse sous forme de fraction <b>irréductible</b> (exemple : 7/12).</p><div class="expr">${frac(a, b)} ${op} ${frac(c, d)}</div>`,
+    fields: [{ label: "=", kind: "frac", answer: N / D, show: fracTxt(N, D) }],
+    explain: `On met les fractions au même dénominateur (par exemple ${b * d / gcd(b, d)}), on ${op === "+" ? "additionne" : "soustrait"} les numérateurs puis on simplifie : <b>${fracTxt(N, D)}</b>.` };
+});
+addG("maths", "Nombres", () => {
+  const d = pick([3, 4, 5, 6, 8]), n = ri(1, d - 1), Q = d * ri(4, 12), ctx = pick([["Un club de sport compte", "membres", "sont des filles", "filles"], ["Une classe a lu", "pages d'un roman", "ont été lues le premier jour", "pages lues le premier jour"], ["Un magasin a reçu", "colis", "sont arrivés abîmés", "colis abîmés"]]);
+  return { type: "num", pts: 1, prompt: `<p>${ctx[0]} ${Q} ${ctx[1]}. Les ${frac(n, d)} ${ctx[2]}.</p><p>Combien y a-t-il de ${ctx[3]} ?</p>`, fields: [num1("Réponse :", Q * n / d)],
+    explain: `Prendre les ${n}/${d} de ${Q}, c'est (${Q} : ${d}) × ${n} = ${Q / d} × ${n} = <b>${Q * n / d}</b>.` };
+});
+addG("maths", "Nombres", () => {
+  const a = pick([2, 3]), n = ri(2, 4), b = pick([2, 3, 5]), m = pick([2, 3]), k = ri(1, 3);
+  const f = [
+    { label: `(${MIN}${a})${sup[n] || "^" + n} =`, v: Math.pow(-a, n) },
+    { label: `${MIN}${b}${sup[m]} =`, v: -Math.pow(b, m) },
+    { label: `10<sup>${MIN}${k}</sup> =`, v: Math.pow(10, -k), show: fmt(Math.pow(10, -k), 4) },
+  ];
+  return { type: "num", pts: 1.5, prompt: `<p>Calcule chaque puissance.</p>`, fields: f.map(x => num1(x.label, x.v, x.show, { tol: 1e-12 })),
+    explain: `Attention aux parenthèses : (${MIN}${a})${sup[n] || "^" + n} = ${fmt(Math.pow(-a, n))} (exposant ${n % 2 ? "impair : signe −" : "pair : signe +"}), mais ${MIN}${b}${sup[m]} = ${MIN}(${b}${sup[m]}) = ${fmt(-Math.pow(b, m))}. Et 10<sup>${MIN}${k}</sup> = 1 : 10<sup>${k}</sup> = ${fmt(Math.pow(10, -k), 4)}.` };
+});
+addG("maths", "Nombres", () => {
+  const m = ri(11, 99) / 10, e = pick([-5, -4, -3, 4, 5, 6, 7]), v = m * Math.pow(10, e);
+  const shown = e < 0 ? fmt(v, 8) : fmt(v, 0);
+  return { type: "num", pts: 1, prompt: `<p>Écris ce nombre en <b>notation scientifique</b>.</p><div class="expr">${shown}</div><p class="hint">Écris par exemple : 3,4 × 10^5 ou 3,4 × 10^-5</p>`,
+    fields: [{ label: "=", kind: "sci", answer: v, show: `${fmt(m)} × 10^${e}`, wide: true }],
+    explain: `En notation scientifique, le premier nombre est compris entre 1 et 10 : ${fmt(m)}. On compte de combien de rangs la virgule se déplace : <b>${fmt(m)} × 10<sup>${e < 0 ? MIN + (-e) : e}</sup></b>.` };
+});
+addG("maths", "Algèbre", () => {
+  const v = pick(["x", "a", "y"]); const a = nz(-5, 6), b = nz(-8, 9), c = nz(-7, 7), d = nz(-6, 6), e = nz(-9, 9), f = nz(-9, 9);
+  const parts = shuffle([[a, 2], [b, 1], [e, 0], [c, 2], [d, 1], [f, 0]]);
+  const s = parts.map(([co, p], i) => { const t = polyStr([[co, p]], v); return i === 0 ? t : (co < 0 ? " " + MIN + " " + t.slice(1) : " + " + t); }).join("");
+  const res = [[a + c, 2], [b + d, 1], [e + f, 0]], nt = res.filter(r => r[0] !== 0).length || 1;
+  return { type: "num", pts: 1.5, prompt: `<p>Réduis l'expression.</p><div class="expr">${s}</div><p class="hint">Écris x² comme x^2 ou x².</p>`,
+    fields: [{ label: "=", kind: "expr", v, coeffs: res, maxTerms: nt, show: polyStr(res, v), wide: true }],
+    explain: `On regroupe les termes semblables (les ${v}², les ${v}, les nombres) : <b>${polyStr(res, v)}</b>.` };
+});
+addG("maths", "Algèbre", () => {
+  const k = nz(-5, 6), a = nz(-4, 5), b = nz(-9, 9), m = ri(2, 5), c = nz(-4, 5), d = nz(-9, 9);
+  const res = [[k * a - m * c, 1], [k * b - m * d, 0]], nt = res.filter(r => r[0] !== 0).length || 1;
+  return { type: "num", pts: 1.5, prompt: `<p>Développe puis réduis.</p><div class="expr">${fmt(k)}(${polyStr([[a, 1], [b, 0]])}) ${MIN} ${m}(${polyStr([[c, 1], [d, 0]])})</div>`,
+    fields: [{ label: "=", kind: "expr", v: "x", coeffs: res, maxTerms: nt, show: polyStr(res), wide: true }],
+    explain: `On distribue : ${fmt(k)}(${polyStr([[a, 1], [b, 0]])}) = ${polyStr([[k * a, 1], [k * b, 0]])} et ${MIN}${m}(${polyStr([[c, 1], [d, 0]])}) = ${polyStr([[-m * c, 1], [-m * d, 0]])}. Attention au signe ${MIN} devant ${m} ! On réduit : <b>${polyStr(res)}</b>.` };
+});
+addG("maths", "Algèbre", () => {
+  const a = ri(1, 3), b = nz(-7, 7), c = 1, d = nz(-7, 7);
+  const res = [[a * c, 2], [a * d + b * c, 1], [b * d, 0]], nt = res.filter(r => r[0] !== 0).length;
+  return { type: "num", pts: 1.5, prompt: `<p>Développe et réduis.</p><div class="expr">(${polyStr([[a, 1], [b, 0]])})(${polyStr([[c, 1], [d, 0]])})</div>`,
+    fields: [{ label: "=", kind: "expr", v: "x", coeffs: res, maxTerms: nt, show: polyStr(res), wide: true }],
+    explain: `Chaque terme de la 1re parenthèse multiplie chaque terme de la 2e (double distributivité), puis on réduit les termes en x : <b>${polyStr(res)}</b>.` };
+});
+addG("maths", "Algèbre", () => {
+  const a = pick([1, 1, 2, 3]), b = nz(-8, 8);
+  const res = [[a * a, 2], [2 * a * b, 1], [b * b, 0]];
+  return { type: "num", pts: 1.5, prompt: `<p>Développe à l'aide d'un produit remarquable.</p><div class="expr">(${polyStr([[a, 1], [b, 0]])})²</div>`,
+    fields: [{ label: "=", kind: "expr", v: "x", coeffs: res, maxTerms: 3, show: polyStr(res), wide: true }],
+    explain: `(a ${b < 0 ? MIN : "+"} b)² = a² ${b < 0 ? MIN : "+"} 2ab + b². Ici a = ${polyStr([[a, 1]])} et b = ${Math.abs(b)} : <b>${polyStr(res)}</b>. Erreur fréquente : oublier le double produit ${polyStr([[2 * a * b, 1]])}.` };
+});
+addG("maths", "Algèbre", () => {
+  let a, b; do { a = nz(-7, 9); b = nz(-9, 9); } while (gcd(a, b) !== 1 || a < 0 && b < 0);
+  const k = ri(2, 9);
+  return { type: "num", pts: 1.5, prompt: `<p>Factorise en mettant en évidence le plus grand facteur commun.</p><div class="expr">${polyStr([[k * a, 1], [k * b, 0]])}</div>`,
+    fields: [{ label: "=", kind: "expr", v: "x", coeffs: [[k * a, 1], [k * b, 0]], factor: k, show: `${k}(${polyStr([[a, 1], [b, 0]])})`, wide: true }],
+    explain: `${fmt(k * a)} et ${fmt(k * b)} sont tous deux divisibles par ${k} : <b>${k}(${polyStr([[a, 1], [b, 0]])})</b>. Vérifie en redéveloppant.` };
+});
+addG("maths", "Algèbre", () => {
+  const s = nz(-9, 9), a = ri(2, 8); let c; do c = ri(-4, 6); while (c === a); const b = ri(-12, 12), d = (a - c) * s + b;
+  return { type: "num", pts: 1.5, prompt: `<p>Résous l'équation.</p><div class="expr">${polyStr([[a, 1], [b, 0]])} = ${polyStr([[c, 1], [d, 0]])}</div>`,
+    fields: [num1("x =", s)],
+    explain: `On rassemble les x d'un côté et les nombres de l'autre : ${polyStr([[a - c, 1]])} = ${fmt(d - b)}, donc x = ${fmt(d - b)} : ${fmt(a - c)} = <b>${fmt(s)}</b>. Vérification : ${fmt(a * s + b)} = ${fmt(c * s + d)}.` };
+});
+addG("maths", "Algèbre", () => {
+  const a = ri(2, 6), b = nz(-8, 8), s = nz(-6, 9), c = a * (s + b);
+  return { type: "num", pts: 1.5, prompt: `<p>Résous l'équation.</p><div class="expr">${a}(${polyStr([[1, 1], [b, 0]])}) = ${fmt(c)}</div>`,
+    fields: [num1("x =", s)],
+    explain: `On divise les deux membres par ${a} : x ${b < 0 ? MIN : "+"} ${Math.abs(b)} = ${fmt(c / a)}, donc x = <b>${fmt(s)}</b>.` };
+});
+addG("maths", "Grandeurs", () => {
+  const u = ri(7, 50) * 0.05, n = ri(3, 8); let m; do m = ri(2, 15); while (m === n);
+  const it = pick([["cahiers", "coûtent"], ["croissants", "coûtent"], ["tickets de bus", "coûtent"]]);
+  return { type: "num", pts: 1, prompt: `<p>${n} ${it[0]} ${it[1]} ${fmt(n * u)} €. Les prix sont proportionnels.</p><p>Combien coûtent ${m} ${it[0]} ?</p>`,
+    fields: [num1("Prix :", Math.round(m * u * 100) / 100, fmt(m * u) + " €", { tol: 0.011, suf: "€" })],
+    explain: `Prix d'un seul : ${fmt(n * u)} : ${n} = ${fmt(u)} €. Donc ${m} × ${fmt(u)} = <b>${fmt(m * u)} €</b>.` };
+});
+addG("maths", "Grandeurs", () => {
+  const P = ri(4, 24) * 5, p = pick([10, 15, 20, 25, 30, 40]), r = P * (1 - p / 100);
+  return { type: "num", pts: 1, prompt: `<p>Une paire de baskets coûte ${P} €. Pendant les soldes, elle est réduite de <b>${p} %</b>.</p><p>Quel est le nouveau prix ?</p>`,
+    fields: [num1("Nouveau prix :", r, fmt(r) + " €", { tol: 0.011, suf: "€" })],
+    explain: `La réduction vaut ${p} % de ${P} = ${fmt(P * p / 100)} €. Nouveau prix : ${P} ${MIN} ${fmt(P * p / 100)} = <b>${fmt(r)} €</b> (ou directement ${P} × ${fmt(1 - p / 100)}).` };
+});
+addG("maths", "Traitement de données", () => {
+  const T = pick([20, 25, 40, 50]), k = ri(3, T - 3), pc = k / T * 100;
+  return { type: "num", pts: 1, prompt: `<p>Dans une classe de ${T} élèves, ${k} viennent à l'école à vélo.</p><p>Quel pourcentage des élèves vient à vélo ?</p>`,
+    fields: [num1("Pourcentage :", pc, fmt(pc) + " %", { tol: 0.01, suf: "%" })],
+    explain: `${k} : ${T} = ${fmt(k / T, 3)}, et ${fmt(k / T, 3)} × 100 = <b>${fmt(pc)} %</b>.` };
+});
+addG("maths", "Grandeurs", () => {
+  const E = pick([10000, 20000, 25000, 50000]), d = ri(4, 24) / 2, km = d * E / 100000;
+  return { type: "num", pts: 1, prompt: `<p>Sur une carte à l'échelle <b>1/${fmt(E, 0)}</b>, deux villages sont distants de ${fmt(d)} cm.</p><p>Quelle est la distance réelle en kilomètres ?</p>`,
+    fields: [num1("Distance :", km, fmt(km, 3) + " km", { tol: 0.0011, suf: "km" })],
+    explain: `1 cm sur la carte = ${fmt(E, 0)} cm en réalité. ${fmt(d)} × ${fmt(E, 0)} = ${fmt(d * E, 0)} cm = <b>${fmt(km, 3)} km</b> (1 km = 100 000 cm).` };
+});
+addG("maths", "Grandeurs", () => {
+  const L = ri(10, 30), l = ri(8, 20), h = ri(5, 25), V = L * l * h;
+  return { type: "num", pts: 1.5, prompt: `<p>Un aquarium a la forme d'un parallélépipède rectangle de ${L} cm de long, ${l} cm de large et ${h} cm de haut.</p>`,
+    fields: [num1("Volume en cm³ :", V, fmt(V, 0) + " cm³", { suf: "cm³" }), num1("Contenance en litres :", V / 1000, fmt(V / 1000, 3) + " L", { tol: 0.0011, suf: "L" })],
+    explain: `V = longueur × largeur × hauteur = ${L} × ${l} × ${h} = ${fmt(V, 0)} cm³. Comme 1 L = 1 dm³ = 1 000 cm³ : <b>${fmt(V / 1000, 3)} L</b>.` };
+});
+addG("maths", "Grandeurs", () => {
+  const a = ri(2, 9), b = ri(2, 30) / 2, c = ri(1, 9) * 1000;
+  return { type: "num", pts: 1.5, prompt: `<p>Complète les conversions.</p>`,
+    fields: [num1(`${a} m² =`, a * 10000, fmt(a * 10000, 0) + " cm²", { suf: "cm²" }), num1(`${fmt(b)} dm³ =`, b, fmt(b) + " L", { suf: "L" }), num1(`${fmt(c, 0)} m =`, c / 1000, fmt(c / 1000) + " km", { suf: "km" })],
+    explain: `1 m² = 100 cm × 100 cm = 10 000 cm² ; 1 dm³ = 1 L ; 1 km = 1 000 m.` };
+});
+addG("maths", "Grandeurs", () => {
+  const k = pick([1.5, 2.5, 3, 4, 0.5, 1.2]), xs = shuffle([2, 3, 4, 5, 6, 8, 10]).slice(0, 4).sort((a, b) => a - b), hide = shuffle([0, 1, 2, 3]).slice(0, 2).sort();
+  const known = [0, 1, 2, 3].find(i => !hide.includes(i));
+  const rows = [["Masse de fromage (kg)", ...xs.map(x => fmt(x))], ["Prix (€)", ...xs.map((x, i) => hide.includes(i) ? `<b>${String.fromCharCode(65 + hide.indexOf(i))}</b>` : fmt(x * k * 4))]];
+  return { type: "num", pts: 1.5, prompt: `<p>Ce tableau est un tableau de proportionnalité. Trouve les valeurs A et B.</p>` + table(["", "", "", "", ""].slice(0, 0), rows).replace("<tr></tr>", ""),
+    fields: hide.map((i, j) => num1(String.fromCharCode(65 + j) + " =", xs[i] * k * 4, fmt(xs[i] * k * 4) + " €", { tol: 0.011, suf: "€" })),
+    explain: `Le coefficient de proportionnalité est ${fmt(xs[known] * k * 4)} : ${fmt(xs[known])} = ${fmt(k * 4)} € par kg. On multiplie chaque masse par ${fmt(k * 4)}.` };
+});
+addG("maths", "Traitement de données", () => {
+  const n = pick([5, 7]); let notes = Array.from({ length: n }, () => ri(6, 19)); const mean = notes.reduce((s, x) => s + x, 0) / n, sorted = notes.slice().sort((a, b) => a - b), med = sorted[(n - 1) / 2];
+  return { type: "num", pts: 1.5, prompt: `<p>Voici les notes (sur 20) obtenues par Inès à ses derniers contrôles :</p><div class="expr">${notes.join(" ; ")}</div>`,
+    fields: [num1("Moyenne :", mean, fmt(mean), { tol: 0.011 }), num1("Médiane :", med)],
+    explain: `Moyenne = somme : nombre de notes = ${notes.reduce((s, x) => s + x, 0)} : ${n} ≈ <b>${fmt(mean)}</b>. Pour la médiane, on range les notes (${sorted.join(" ; ")}) et on prend celle du milieu : <b>${med}</b>.` };
+});
+const TRIP = [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15], [7, 24, 25], [12, 16, 20]];
+addG("maths", "Géométrie", () => {
+  const [a, b, c] = pick(TRIP);
+  return { type: "num", pts: 1.5, prompt: `<p>Le triangle ABC est rectangle en B. AB = ${a} cm et BC = ${b} cm.</p><p>Calcule la longueur de l'hypoténuse [AC].</p>`, figure: figRight(a + " cm", b + " cm", "?"),
+    fields: [num1("AC =", c, c + " cm", { suf: "cm" })],
+    explain: `Pythagore : AC² = AB² + BC² = ${a * a} + ${b * b} = ${c * c}, donc AC = √${c * c} = <b>${c} cm</b>.` };
+});
+addG("maths", "Géométrie", () => {
+  const [a, b, c] = pick(TRIP);
+  return { type: "num", pts: 1.5, prompt: `<p>Le triangle ABC est rectangle en B. AC = ${c} cm et BC = ${b} cm.</p><p>Calcule la longueur AB.</p>`, figure: figRight("?", b + " cm", c + " cm"),
+    fields: [num1("AB =", a, a + " cm", { suf: "cm" })],
+    explain: `Pythagore : AB² = AC² ${MIN} BC² = ${c * c} ${MIN} ${b * b} = ${a * a}, donc AB = <b>${a} cm</b>. On soustrait car on cherche un côté de l'angle droit.` };
+});
+addG("maths", "Géométrie", () => {
+  const A = ri(25, 80), B = ri(25, 150 - A), C = 180 - A - B;
+  return { type: "num", pts: 1, prompt: `<p>Dans ce triangle, calcule l'amplitude de l'angle manquant.</p>`, figure: figTri(A + "°", B + "°", "?"),
+    fields: [num1("Angle =", C, C + "°", { suf: "°" })],
+    explain: `La somme des angles d'un triangle vaut 180°. 180 ${MIN} ${A} ${MIN} ${B} = <b>${C}°</b>.` };
+});
+addG("maths", "Géométrie", () => {
+  const top = 2 * ri(10, 60), base = (180 - top) / 2;
+  return { type: "num", pts: 1, prompt: `<p>Ce triangle est isocèle. L'angle au sommet mesure ${top}°.</p><p>Calcule l'amplitude d'un angle à la base.</p>`, figure: figIso(top + "°"),
+    fields: [num1("Angle à la base =", base, base + "°", { suf: "°" })],
+    explain: `Les deux angles à la base d'un triangle isocèle sont égaux : (180 ${MIN} ${top}) : 2 = <b>${base}°</b>.` };
+});
+addG("maths", "Grandeurs", () => {
+  const B = ri(8, 16), b = ri(3, B - 2), h = ri(3, 9), A = (B + b) * h / 2;
+  return { type: "num", pts: 1.5, prompt: `<p>Calcule l'aire de ce trapèze.</p>`, figure: figTrap(B + " cm", b + " cm", h + " cm"),
+    fields: [num1("Aire :", A, fmt(A) + " cm²", { suf: "cm²" })],
+    explain: `Aire du trapèze = (grande base + petite base) × hauteur : 2 = (${B} + ${b}) × ${h} : 2 = <b>${fmt(A)} cm²</b>.` };
+});
+addG("maths", "Grandeurs", () => {
+  const r = ri(2, 12), A = 3.14 * r * r, P = 2 * 3.14 * r;
+  return { type: "num", pts: 1.5, prompt: `<p>Le rayon de ce disque mesure ${r} cm. Utilise π ≈ 3,14.</p>`, figure: figCircle(r + " cm"),
+    fields: [num1("Périmètre :", P, fmt(P) + " cm", { tol: 0.06, suf: "cm" }), num1("Aire :", A, fmt(A) + " cm²", { tol: 0.06, suf: "cm²" })],
+    explain: `Périmètre = 2 × π × r = 2 × 3,14 × ${r} = <b>${fmt(P)} cm</b>. Aire = π × r² = 3,14 × ${r * r} = <b>${fmt(A)} cm²</b>.` };
+});
+function figBars(cats, vals) {
+  const max = Math.ceil(Math.max(...vals) / 2) * 2 + 2, H = 150, Y = v => 180 - v / max * H, w = 250 / cats.length;
+  let g = ""; for (let v = 0; v <= max; v += 2) g += `<line class="g" x1="50" y1="${Y(v)}" x2="310" y2="${Y(v)}"/><text class="m" x="44" y="${Y(v) + 4}" text-anchor="end">${v}</text>`;
+  const bars = vals.map((v, i) => `<rect x="${58 + i * w}" y="${Y(v)}" width="${w - 16}" height="${180 - Y(v)}" style="fill:var(--ink);opacity:.85"/><text class="m" x="${58 + i * w + (w - 16) / 2}" y="198" text-anchor="middle">${cats[i]}</text>`).join("");
+  return svg(330, 215, g + bars + `<line class="s" x1="50" y1="180" x2="312" y2="180"/><text class="m" x="6" y="16">nombre d'élèves</text>`);
+}
+addG("maths", "Traitement de données", () => {
+  const cats = shuffle(["Foot", "Basket", "Natation", "Danse", "Tennis", "Judo"]).slice(0, 5), vals = cats.map(() => ri(2, 12)), tot = vals.reduce((a, b) => a + b, 0);
+  const i = ri(0, 4); let j; do j = ri(0, 4); while (j === i); const pc = vals[j] / tot * 100;
+  return { type: "num", pts: 1.5, prompt: `<p>Ce diagramme montre le sport préféré des élèves de 2e année d'une école.</p>` + figBars(cats, vals),
+    fields: [num1(`Nombre d'élèves qui préfèrent : ${cats[i]}`, vals[i]), num1(`Nombre total d'élèves interrogés`, tot), num1(`Pourcentage d'élèves qui préfèrent : ${cats[j]} (arrondi au dixième)`, pc, fmt(pc, 1) + " %", { tol: 0.051, suf: "%" })],
+    explain: `On lit la hauteur de chaque barre. Total : ${vals.join(" + ")} = ${tot}. Pourcentage : ${vals[j]} : ${tot} × 100 ≈ <b>${fmt(pc, 1)} %</b>.` };
+});
+addG("maths", "Traitement de données", () => {
+  const d1 = pick([4, 6, 8]), t1 = pick([20, 30]), p = pick([10, 20]), d2 = d1 + pick([4, 6]), t2 = t1 + p + pick([20, 30]);
+  const X = t => 50 + t * 4, Y = d => 180 - d * 10;
+  let g = ""; for (let t = 0; t <= 60; t += 10) g += `<line class="g" x1="${X(t)}" y1="20" x2="${X(t)}" y2="180"/><text class="m" x="${X(t)}" y="198" text-anchor="middle">${t}</text>`;
+  for (let d = 0; d <= 16; d += 2) g += `<line class="g" x1="50" y1="${Y(d)}" x2="${X(60)}" y2="${Y(d)}"/><text class="m" x="44" y="${Y(d) + 4}" text-anchor="end">${d}</text>`;
+  const fig = svg(330, 225, g + `<line class="s" x1="50" y1="180" x2="${X(60) + 4}" y2="180"/><line class="s" x1="50" y1="184" x2="50" y2="16"/><polyline class="c" points="${X(0)},${Y(0)} ${X(t1)},${Y(d1)} ${X(t1 + p)},${Y(d1)} ${X(t2)},${Y(d2)}"/><text class="m" x="${X(60)}" y="216" text-anchor="end">temps (min)</text><text class="m" x="6" y="12">distance (km)</text>`);
+  return { type: "num", pts: 1.5, prompt: `<p>Le graphique représente la balade à vélo de Lina.</p>` + fig,
+    fields: [num1(`Distance parcourue après ${t1} min :`, d1, d1 + " km", { suf: "km" }), num1("Durée de la pause :", p, p + " min", { suf: "min" }), num1("Distance totale :", d2, d2 + " km", { suf: "km" })],
+    explain: `Pendant la pause, la distance ne change pas : le graphique est horizontal de ${t1} à ${t1 + p} min, soit <b>${p} min</b>. La distance totale se lit à la fin : <b>${d2} km</b>.` };
+});
+// questions ouvertes maths (corrigées par l'IA)
+addG("maths", "Justifier", () => {
+  const good = Math.random() < .5; let s;
+  if (good) { const [a, b, c] = pick(TRIP); s = [a, b, c]; } else s = pick([[6, 8, 11], [5, 7, 9], [4, 6, 7], [7, 9, 12], [8, 10, 13], [5, 11, 12]]);
+  const [a, b, c] = s, lhs = a * a + b * b, rhs = c * c, ok = lhs === rhs;
+  const sides = shuffle(s);
+  return { type: "open", pts: 3, prompt: `<p>Un triangle a des côtés de ${sides[0]} cm, ${sides[1]} cm et ${sides[2]} cm.</p><p><b>Ce triangle est-il rectangle ?</b> Justifie ta réponse par un calcul.</p>`,
+    model: `Le plus grand côté mesure ${c} cm : ${c}² = ${rhs}. Les deux autres : ${a}² + ${b}² = ${a * a} + ${b * b} = ${lhs}. ${ok ? `Comme ${rhs} = ${lhs}, le triangle EST rectangle (réciproque de Pythagore). L'angle droit est opposé au côté de ${c} cm.` : `Comme ${rhs} ≠ ${lhs}, le triangle N'EST PAS rectangle (sinon on aurait l'égalité de Pythagore).`}`,
+    criteria: ["identifie le plus grand côté comme hypoténuse possible (1 pt)", "calcule correctement le carré du plus grand côté et la somme des carrés des deux autres (1 pt)", `compare et conclut correctement (${ok ? "rectangle" : "pas rectangle"}) en citant Pythagore ou sa réciproque (1 pt)`],
+    explain: `On compare le carré du plus grand côté avec la somme des carrés des deux autres.` };
+});
+const MISC = [
+  { e: `Léa affirme : « (${MIN}3)² = ${MIN}9 ».`, m: `Léa se trompe. (${MIN}3)² = (${MIN}3) × (${MIN}3) = 9 : le produit de deux nombres négatifs est positif. C'est ${MIN}3² (sans parenthèses) qui vaut ${MIN}9.`, c: ["dit que Léa se trompe (1 pt)", "donne le bon résultat 9 (1 pt)", "explique : (−3)×(−3), deux négatifs donnent un positif, ou la différence avec −3² (1 pt)"] },
+  { e: `Noah a écrit : « 2(x + 5) = 2x + 5 ».`, m: `Noah se trompe : il faut multiplier chaque terme de la parenthèse par 2. 2(x + 5) = 2x + 10. Vérification avec x = 1 : 2(1 + 5) = 12 alors que 2 × 1 + 5 = 7.`, c: ["dit que Noah se trompe (1 pt)", "donne 2x + 10 (1 pt)", "explique la distributivité (chaque terme multiplié) ou vérifie avec un exemple (1 pt)"] },
+  { e: `Sofia a calculé : « 1/2 + 1/3 = 2/5 ».`, m: `Sofia se trompe : on n'additionne pas les dénominateurs. On met au même dénominateur : 1/2 + 1/3 = 3/6 + 2/6 = 5/6.`, c: ["dit que Sofia se trompe (1 pt)", "donne 5/6 (1 pt)", "explique qu'il faut un dénominateur commun (1 pt)"] },
+  { e: `Adam affirme : « (a + b)² = a² + b² ».`, m: `Adam se trompe : (a + b)² = (a + b)(a + b) = a² + 2ab + b². Il oublie le double produit 2ab. Contre-exemple : (1 + 2)² = 9 alors que 1² + 2² = 5.`, c: ["dit qu'Adam se trompe (1 pt)", "donne a² + 2ab + b² (1 pt)", "justifie par le développement ou un contre-exemple chiffré (1 pt)"] },
+  { e: `Maëlle dit : « x · x = 2x ».`, m: `Maëlle se trompe : x · x = x². 2x = x + x. Contre-exemple : si x = 3, x · x = 9 mais 2x = 6.`, c: ["dit que Maëlle se trompe (1 pt)", "donne x² (1 pt)", "distingue x·x et x + x ou donne un contre-exemple (1 pt)"] },
+  { e: `Yanis affirme : « Si on augmente un prix de 20 % puis qu'on le diminue de 20 %, on retrouve le prix de départ. »`, m: `Yanis se trompe. Exemple avec 100 € : +20 % → 120 €, puis −20 % de 120 € = −24 € → 96 €. On ne retrouve pas 100 € car la 2e réduction se calcule sur un prix plus grand.`, c: ["dit que Yanis se trompe (1 pt)", "fait un calcul correct sur un exemple (1 pt)", "explique que le 2e pourcentage porte sur une autre base (1 pt)"] },
+];
+addG("maths", "Justifier", () => { const m = pick(MISC); return { type: "open", pts: 3, prompt: `<p>${m.e}</p><p><b>A-t-il/elle raison ?</b> Justifie ta réponse.</p>`, model: m.m, criteria: m.c, explain: "" }; });
+addG("maths", "Justifier", () => {
+  if (Math.random() < .5) {
+    const n = ri(8, 60), S = 3 * n + 3;
+    return { type: "open", pts: 3, prompt: `<p>La somme de trois nombres entiers consécutifs est égale à ${S}.</p><p><b>Quels sont ces trois nombres ?</b> Écris l'équation que tu utilises et résous-la.</p>`,
+      model: `Soit n le plus petit nombre. Les nombres sont n, n + 1 et n + 2. Équation : n + (n + 1) + (n + 2) = ${S}, donc 3n + 3 = ${S}, 3n = ${S - 3}, n = ${n}. Les nombres sont ${n}, ${n + 1} et ${n + 2}. Vérification : ${n} + ${n + 1} + ${n + 2} = ${S}.`,
+      criteria: ["choisit une inconnue et écrit les trois nombres (n, n+1, n+2) (1 pt)", "écrit et résout correctement l'équation (1 pt)", `donne les trois nombres ${n}, ${n + 1}, ${n + 2} (1 pt)`], explain: "" };
+  }
+  const e = ri(4, 9), d = ri(2, 4), A = 2 * (e + d) + 3 * e;
+  return { type: "open", pts: 3, prompt: `<p>Au cinéma, une place adulte coûte ${d} € de plus qu'une place enfant. Une famille paie ${A} € pour 2 adultes et 3 enfants.</p><p><b>Quel est le prix d'une place enfant et d'une place adulte ?</b> Écris l'équation que tu utilises.</p>`,
+    model: `Soit x le prix d'une place enfant. Une place adulte coûte x + ${d}. Équation : 2(x + ${d}) + 3x = ${A} → 5x + ${2 * d} = ${A} → 5x = ${A - 2 * d} → x = ${e}. Enfant : ${e} €, adulte : ${e + d} €. Vérification : 2 × ${e + d} + 3 × ${e} = ${A}.`,
+    criteria: ["choisit une inconnue et exprime le prix adulte (x + " + d + ") (1 pt)", "écrit et résout correctement l'équation (1 pt)", `conclut : enfant ${e} €, adulte ${e + d} € (1 pt)`], explain: "" };
+});
+
+/* ============ banque : SCIENCES (générateurs) ============ */
+const MAT = [["aluminium", 2.7], ["fer", 7.9], ["cuivre", 8.9], ["chêne", 0.7], ["liège", 0.24], ["glace", 0.92], ["verre", 2.5], ["plomb", 11.3]];
+addG("sciences", "Matière", () => {
+  const four = shuffle(MAT).slice(0, 4), tgt = four[0], V = ri(10, 60), m = Math.round(tgt[1] * V * 10) / 10;
+  const rows = shuffle(four).map(([n, r]) => [n, fmt(r)]);
+  return { type: "qcm", pts: 1.5, prompt: `<p>Un petit bloc plein a une masse de <b>${fmt(m)} g</b> et un volume de <b>${V} cm³</b>.</p><p>À l'aide du tableau, identifie le matériau.</p>` + table(["Matériau", "Masse volumique (g/cm³)"], rows),
+    options: four.map(x => x[0]), answer: 0,
+    explain: `Masse volumique = masse : volume = ${fmt(m)} : ${V} ≈ <b>${fmt(m / V)} g/cm³</b>, ce qui correspond au ${tgt[0]}.` };
+});
+addG("sciences", "Matière", () => {
+  const t = pick(MAT.filter(x => x[1] > 1)), V = ri(5, 40), m = t[1] * V;
+  return { type: "num", pts: 1, prompt: `<p>La masse volumique du ${t[0]} vaut ${fmt(t[1])} g/cm³.</p><p>Quelle est la masse d'une pièce de ${t[0]} de ${V} cm³ ?</p>`,
+    fields: [num1("Masse :", m, fmt(m) + " g", { tol: 0.06, suf: "g" })],
+    explain: `m = ρ × V = ${fmt(t[1])} × ${V} = <b>${fmt(m)} g</b>.` };
+});
+const SUBST = [["eau", 0], ["cyclohexane", 6], ["acide acétique", 17], ["paraffine", 54], ["naphtalène", 80], ["soufre", 115], ["étain", 232]];
+addG("sciences", "Matière", () => {
+  const four = shuffle(SUBST).slice(0, 4), tgt = four[0], t1 = ri(3, 6), t2 = t1 + ri(5, 9);
+  return { type: "qcm", pts: 1.5, prompt: `<p>On chauffe un solide inconnu et on relève sa température. Voici le graphique obtenu.</p>` + figCurve(tgt[1], t1, t2) + `<p>À l'aide du tableau, identifie la substance.</p>` + table(["Substance", "Température de fusion (°C)"], shuffle(four).map(([n, T]) => [n, fmt(T)])),
+    options: four.map(x => x[0]), answer: 0,
+    explain: `Le palier (partie horizontale) indique la température de fusion : <b>${tgt[1]} °C</b>. Substance : ${tgt[0]}. Un corps pur fond à température constante.` };
+});
+addG("sciences", "Matière", () => {
+  const T = pick(SUBST)[1], t1 = ri(3, 6), d = ri(4, 9), t2 = t1 + d;
+  return { type: "num", pts: 1, prompt: `<p>Voici la courbe de chauffage d'un corps pur solide.</p>` + figCurve(T, t1, t2) + `<p>Pendant combien de minutes la substance est-elle en train de fondre ?</p>`,
+    fields: [num1("Durée :", d, d + " min", { suf: "min" })],
+    explain: `La fusion correspond au palier : de ${t1} min à ${t2} min, donc <b>${d} minutes</b>. Pendant ce temps, solide et liquide coexistent.` };
+});
+addG("sciences", "Matière", () => {
+  const a = ri(2, 95) * 10, b = ri(3, 40) / 2, c = ri(2, 9) * 100;
+  return { type: "num", pts: 1.5, prompt: `<p>Complète les conversions de volumes.</p>`,
+    fields: [num1(`${a} mL =`, a / 1000, fmt(a / 1000, 3) + " L", { suf: "L", tol: 1e-6 }), num1(`${fmt(b)} L =`, b * 1000, fmt(b * 1000, 0) + " cm³", { suf: "cm³" }), num1(`${c} cm³ =`, c, c + " mL", { suf: "mL" })],
+    explain: `1 L = 1 000 mL = 1 000 cm³ ; donc 1 mL = 1 cm³.` };
+});
+const SEP = [["Du sable mélangé à de l'eau", "Filtration"], ["De l'eau salée dont on veut récupérer le sel", "Évaporation"], ["De la limaille de fer mélangée à du sable", "Aimantation (tri magnétique)"], ["De l'huile mélangée à de l'eau", "Décantation (ampoule à décanter)"], ["Des cailloux mélangés à du sable fin", "Tamisage"], ["De l'eau pure à récupérer à partir d'eau salée", "Distillation"]];
+addG("sciences", "Matière", () => { const it = shuffle(SEP).slice(0, 4); return { type: "match", pts: 2, prompt: `<p>Pour chaque mélange, choisis la technique de séparation la plus adaptée.</p>`, items: it.map(([l, r]) => ({ left: l, answer: r })), choices: SEP.map(x => x[1]), explain: `Filtration : solide non dissous dans un liquide. Évaporation : récupérer le solide dissous. Distillation : récupérer le liquide pur. Décantation : liquides non miscibles. Tamisage : grains de tailles différentes. Aimant : objets en fer.` }; });
+const ETATS = [["Solide → liquide", "Fusion"], ["Liquide → solide", "Solidification"], ["Liquide → gaz", "Vaporisation"], ["Gaz → liquide", "Liquéfaction"], ["Solide → gaz", "Sublimation"], ["Gaz → solide", "Condensation solide"]];
+addG("sciences", "Matière", () => { const it = shuffle(ETATS).slice(0, 4); return { type: "match", pts: 2, prompt: `<p>Donne le nom de chaque changement d'état.</p>`, items: it.map(([l, r]) => ({ left: l, answer: r })), choices: ETATS.map(x => x[1]), explain: ETATS.map(x => x.join(" : ")).join(" ; ") + "." }; });
+const TRANS = [["Le glaçon qui fond", "Physique"], ["Le fer qui rouille", "Chimique"], ["Le sucre qui se dissout dans le thé", "Physique"], ["Le bois qui brûle", "Chimique"], ["La cuisson d'un œuf", "Chimique"], ["L'eau qui bout", "Physique"], ["Le vinaigre versé sur du bicarbonate qui mousse", "Chimique"], ["Le verre qu'on casse", "Physique"]];
+addG("sciences", "Matière", () => { const it = shuffle(TRANS).slice(0, 5); return { type: "match", pts: 2, prompt: `<p>Chaque transformation est-elle <b>physique</b> ou <b>chimique</b> ?</p>`, items: it.map(([l, r]) => ({ left: l, answer: r })), choices: ["Physique", "Chimique"], explain: `Transformation chimique : de nouvelles substances apparaissent (rouille, gaz, cendres…). Transformation physique : la substance reste la même (changement d'état, dissolution, forme).` }; });
+const MIX = [["Eau + sel dissous", "Homogène"], ["Eau + huile", "Hétérogène"], ["Air filtré", "Homogène"], ["Jus d'orange avec pulpe", "Hétérogène"], ["Eau + sirop de menthe", "Homogène"], ["Eau boueuse", "Hétérogène"], ["Vinaigre", "Homogène"]];
+addG("sciences", "Matière", () => { const it = shuffle(MIX).slice(0, 5); return { type: "match", pts: 1.5, prompt: `<p>Ces mélanges sont-ils <b>homogènes</b> ou <b>hétérogènes</b> ?</p>`, items: it.map(([l, r]) => ({ left: l, answer: r })), choices: ["Homogène", "Hétérogène"], explain: `Homogène : on ne distingue qu'une seule phase à l'œil nu. Hétérogène : on distingue au moins deux constituants.` }; });
+const CHAINS = [["Herbe", "Criquet", "Grenouille", "Héron"], ["Algues", "Petits crustacés", "Hareng", "Phoque"], ["Feuilles de chêne", "Chenille", "Mésange", "Épervier"], ["Graines", "Mulot", "Belette", "Renard"]];
+addG("sciences", "Vivant", () => { const c = pick(CHAINS); return { type: "order", pts: 1.5, prompt: `<p>Remets les êtres vivants dans l'ordre pour former une chaîne alimentaire (du <b>producteur</b> au dernier consommateur).</p>`, items: c, explain: `${c.join(" → ")}. La flèche signifie « est mangé par ». Le premier maillon est toujours un producteur (végétal chlorophyllien).` }; });
+const ANIM = [["Chauve-souris", "Mammifère"], ["Dauphin", "Mammifère"], ["Manchot", "Oiseau"], ["Autruche", "Oiseau"], ["Requin", "Poisson"], ["Hippocampe", "Poisson"], ["Salamandre", "Amphibien"], ["Crapaud", "Amphibien"], ["Tortue", "Reptile"], ["Lézard", "Reptile"], ["Araignée", "Arachnide"], ["Coccinelle", "Insecte"], ["Escargot", "Mollusque"]];
+addG("sciences", "Vivant", () => { const it = shuffle(ANIM).slice(0, 5); return { type: "match", pts: 2, prompt: `<p>Classe chaque animal dans son groupe.</p>`, items: it.map(([l, r]) => ({ left: l, answer: r })), choices: [...new Set(ANIM.map(x => x[1]))], explain: `Mammifères : poils, allaitent. Oiseaux : plumes. Poissons : écailles, nageoires, branchies. Amphibiens : peau nue et humide. Reptiles : écailles, peau sèche. Insectes : 6 pattes. Arachnides : 8 pattes. Mollusques : corps mou, souvent une coquille.` }; });
+addG("sciences", "Organisme humain", () => { const c = ["Bouche", "Œsophage", "Estomac", "Intestin grêle", "Gros intestin"]; return { type: "order", pts: 1.5, prompt: `<p>Remets dans l'ordre les organes traversés par les aliments dans le tube digestif.</p>`, items: c, explain: c.join(" → ") + ". Les nutriments passent dans le sang au niveau de l'intestin grêle." }; });
+addG("sciences", "Organisme humain", () => { const c = ["Nez / bouche", "Trachée", "Bronches", "Bronchioles", "Alvéoles pulmonaires"]; return { type: "order", pts: 1.5, prompt: `<p>Remets dans l'ordre le trajet de l'air lors de l'inspiration.</p>`, items: c, explain: c.join(" → ") + ". Les échanges de gaz avec le sang se font dans les alvéoles." }; });
+const ENER = [["Panneau solaire photovoltaïque", "Lumineuse → électrique"], ["Lampe", "Électrique → lumineuse (+ thermique)"], ["Éolienne", "Mouvement → électrique"], ["Radiateur électrique", "Électrique → thermique"], ["Muscle", "Chimique → mouvement"], ["Pile", "Chimique → électrique"], ["Moteur électrique", "Électrique → mouvement"]];
+addG("sciences", "Énergie", () => { const it = shuffle(ENER).slice(0, 4); return { type: "match", pts: 2, prompt: `<p>Quelle conversion d'énergie réalise chaque objet ?</p>`, items: it.map(([l, r]) => ({ left: l, answer: r })), choices: ENER.map(x => x[1]), explain: ENER.map(x => x.join(" : ")).join(" ; ") + "." }; });
+addG("sciences", "Démarche scientifique", () => {
+  const r = ri(64, 76), w = r + ri(18, 30), c1 = w + ri(28, 40), c2 = c1 + ri(25, 38);
+  const doc = `<p>Sarah mesure sa fréquence cardiaque (en battements par minute) pour différents efforts.</p>` + table(["Effort", "Repos", "Marche", "Course lente", "Course rapide"], [["Fréquence cardiaque (bpm)", r, w, c1, c2]]);
+  const v = ri(0, 2);
+  if (v === 0) return { type: "qcm", pts: 1, prompt: doc + `<p>Dans cette expérience, quelle est la grandeur <b>mesurée</b> (variable dépendante) ?</p>`, options: ["La fréquence cardiaque", "L'intensité de l'effort", "L'âge de Sarah", "La durée de l'expérience"], answer: 0, explain: `On fait varier l'effort (variable indépendante) et on <b>mesure</b> la fréquence cardiaque (variable dépendante).` };
+  if (v === 1) return { type: "num", pts: 1, prompt: doc + `<p>De combien de battements par minute la fréquence cardiaque augmente-t-elle entre le repos et la course rapide ?</p>`, fields: [num1("Augmentation :", c2 - r, (c2 - r) + " bpm", { suf: "bpm" })], explain: `${c2} ${MIN} ${r} = <b>${c2 - r} bpm</b>.` };
+  return { type: "qcm", pts: 1, prompt: doc + `<p>Quelle conclusion peut-on tirer de ce tableau ?</p>`, options: ["Plus l'effort est intense, plus la fréquence cardiaque est élevée.", "La fréquence cardiaque ne dépend pas de l'effort.", "Plus l'effort est intense, plus la fréquence cardiaque diminue.", "Le cœur s'arrête au repos."], answer: 0, explain: `Les valeurs augmentent de gauche à droite : le cœur bat plus vite pour apporter plus de dioxygène et de nutriments aux muscles.` };
+});
+
+/* ============ banque : questions fixes (options mélangées) ============ */
+const S = []; // {id, subject, theme, q}
+const addS = (id, subject, theme, q) => S.push({ id, subject, theme, q });
+// maths
+addS("m-quad1", "maths", "Géométrie", { type: "qcm", pts: 1, prompt: `<p>Un quadrilatère a des diagonales de <b>même longueur</b>, <b>perpendiculaires</b> et qui se coupent en leur <b>milieu</b>. C'est un…</p>`, options: ["carré", "rectangle", "losange", "trapèze isocèle"], answer: 0, explain: "Même milieu → parallélogramme ; même longueur → rectangle ; perpendiculaires → losange. Rectangle ET losange = carré." });
+addS("m-quad2", "maths", "Géométrie", { type: "qcm", pts: 1, prompt: `<p>Quelle propriété est vraie pour <b>tous</b> les parallélogrammes ?</p>`, options: ["Les diagonales se coupent en leur milieu.", "Les diagonales sont perpendiculaires.", "Les diagonales ont la même longueur.", "Il possède deux axes de symétrie."], answer: 0, explain: "Le parallélogramme a un centre de symétrie : le point d'intersection des diagonales, qui est leur milieu commun." });
+addS("m-axes", "maths", "Géométrie", { type: "match", pts: 1.5, prompt: `<p>Combien d'axes de symétrie possède chaque figure ?</p>`, items: [{ left: "Rectangle (non carré)", answer: "2" }, { left: "Carré", answer: "4" }, { left: "Triangle équilatéral", answer: "3" }, { left: "Parallélogramme quelconque", answer: "0" }, { left: "Triangle isocèle (non équilatéral)", answer: "1" }], choices: ["0", "1", "2", "3", "4"], explain: "Rectangle : 2 (médiatrices des côtés). Carré : 4. Triangle équilatéral : 3. Parallélogramme : aucun axe, mais un centre de symétrie. Isocèle : 1." });
+addS("m-prisme", "maths", "Géométrie", { type: "num", pts: 1.5, prompt: `<p>Un prisme droit a pour base un <b>hexagone</b>. Complète.</p>`, fields: [num1("Nombre de faces :", 8), num1("Nombre d'arêtes :", 18), num1("Nombre de sommets :", 12)], explain: "2 bases + 6 faces latérales = 8 faces. 6 arêtes par base × 2 + 6 arêtes latérales = 18. 6 sommets × 2 = 12." });
+addS("m-alt", "maths", "Géométrie", { type: "qcm", pts: 1, prompt: `<p>Deux droites parallèles sont coupées par une sécante. Deux angles <b>alternes-internes</b> sont toujours…</p>`, options: ["de même amplitude", "supplémentaires (somme 180°)", "complémentaires (somme 90°)", "droits"], answer: 0, explain: "Avec des droites parallèles, les angles alternes-internes (et correspondants) ont la même amplitude." });
+addS("m-quadsum", "maths", "Géométrie", { type: "num", pts: 1, prompt: `<p>Un quadrilatère a trois angles de 75°, 110° et 95°. Quelle est l'amplitude du quatrième angle ?</p>`, fields: [num1("Angle :", 80, "80°", { suf: "°" })], explain: "La somme des angles d'un quadrilatère vaut 360°. 360 − 75 − 110 − 95 = 80°." });
+addS("m-mediatrice", "maths", "Géométrie", { type: "qcm", pts: 1, prompt: `<p>La <b>médiatrice</b> d'un segment est la droite…</p>`, options: ["perpendiculaire au segment et passant par son milieu", "qui passe par un sommet et le milieu du côté opposé", "qui partage un angle en deux angles égaux", "parallèle au segment"], answer: 0, explain: "Tout point de la médiatrice est à égale distance des deux extrémités du segment." });
+addS("m-compare", "maths", "Nombres", { type: "qcm", pts: 1, prompt: `<p>Quel est le <b>plus grand</b> de ces nombres ?</p>`, options: [`${MIN}1/3`, `${MIN}0,35`, `${MIN}2/5`, `${MIN}0,5`], answer: 0, explain: "−1/3 ≈ −0,333 ; −0,35 ; −2/5 = −0,4 ; −0,5. Pour les négatifs, le plus grand est le plus proche de 0 : −1/3." });
+addS("m-mult6", "maths", "Nombres", { type: "multi", pts: 1.5, prompt: `<p>Coche <b>tous</b> les multiples de 6.</p>`, options: ["42", "78", "96", "56", "100", "63"], answers: [0, 1, 2], explain: "Un multiple de 6 est pair ET multiple de 3 (somme des chiffres divisible par 3). 56 et 100 ne sont pas multiples de 3 ; 63 est impair." });
+addS("m-inverse", "maths", "Nombres", { type: "match", pts: 1.5, prompt: `<p>Associe chaque nombre à son <b>opposé</b> ou à son <b>inverse</b> comme demandé.</p>`, items: [{ left: "L'opposé de −7", answer: "7" }, { left: "L'inverse de 2/3", answer: "3/2" }, { left: "L'inverse de −4", answer: "−1/4" }, { left: "L'opposé de 3/5", answer: "−3/5" }], choices: ["7", "−7", "3/2", "−2/3", "−1/4", "4", "−3/5", "5/3"], explain: "Opposé : on change le signe (somme = 0). Inverse : 1 divisé par le nombre (produit = 1)." });
+addS("m-vocab", "maths", "Algèbre", { type: "match", pts: 1.5, prompt: `<p>Traduis chaque phrase par une expression.</p>`, items: [{ left: "Le double de x augmenté de 3", answer: "2x + 3" }, { left: "Le double de (x augmenté de 3)", answer: "2(x + 3)" }, { left: "Le carré de x diminué de 3", answer: "x² − 3" }, { left: "Le triple du carré de x", answer: "3x²" }], choices: ["2x + 3", "2(x + 3)", "x² − 3", "(x − 3)²", "3x²", "(3x)²"], explain: "L'ordre des mots indique l'ordre des opérations : « le double de x augmenté de 3 » = on double d'abord, puis on ajoute 3." });
+addS("m-graph", "maths", "Traitement de données", { type: "qcm", pts: 1, prompt: `<p>Le graphique d'une situation de proportionnalité est…</p>`, options: ["une droite qui passe par l'origine", "une droite qui ne passe pas par l'origine", "une courbe", "une droite horizontale"], answer: 0, explain: "Si y = k·x, alors pour x = 0 on a y = 0 : la droite passe par l'origine." });
+// sciences
+addS("s-palier", "sciences", "Matière", { type: "qcm", pts: 1, prompt: `<p>Pendant le palier de fusion d'un corps pur, la substance est…</p>`, options: ["à la fois solide et liquide, à température constante", "entièrement liquide et sa température augmente", "entièrement solide et sa température baisse", "gazeuse"], answer: 0, explain: "Pendant le palier, l'énergie reçue sert à changer d'état, pas à chauffer : la température reste constante." });
+addS("s-part", "sciences", "Matière", { type: "match", pts: 1.5, prompt: `<p>Associe chaque état à la description de ses particules.</p>`, items: [{ left: "Solide", answer: "Collées, ordonnées, vibrent sur place" }, { left: "Liquide", answer: "Proches, désordonnées, glissent les unes sur les autres" }, { left: "Gaz", answer: "Éloignées, désordonnées, très agitées" }], choices: ["Collées, ordonnées, vibrent sur place", "Proches, désordonnées, glissent les unes sur les autres", "Éloignées, désordonnées, très agitées"], explain: "C'est le modèle particulaire : plus on chauffe, plus les particules s'agitent et s'éloignent." });
+addS("s-masse", "sciences", "Matière", { type: "qcm", pts: 1, prompt: `<p>On fait fondre complètement 50 g de glace dans un récipient fermé. Quelle est la masse d'eau liquide obtenue ?</p>`, options: ["50 g", "Plus de 50 g", "Moins de 50 g", "On ne peut pas savoir"], answer: 0, explain: "Lors d'un changement d'état, la masse se conserve : les particules sont les mêmes, seule leur disposition change. (Le volume, lui, change.)" });
+addS("s-gaz", "sciences", "Matière", { type: "multi", pts: 1.5, prompt: `<p>Coche les propositions <b>vraies</b> au sujet des gaz.</p>`, options: ["Un gaz occupe tout l'espace disponible.", "Un gaz peut être comprimé.", "Un gaz a une masse.", "Un gaz a une forme propre."], answers: [0, 1, 2], explain: "Un gaz n'a ni forme ni volume propres, il est compressible et il a bien une masse (1 L d'air ≈ 1,2 g)." });
+addS("s-pur", "sciences", "Matière", { type: "qcm", pts: 1, prompt: `<p>L'eau <b>distillée</b> est…</p>`, options: ["un corps pur", "un mélange homogène", "un mélange hétérogène", "une solution"], answer: 0, explain: "La distillation ne laisse que de l'eau : une seule substance, donc un corps pur. L'eau du robinet, elle, est un mélange (sels minéraux dissous)." });
+addS("s-flotte", "sciences", "Matière", { type: "qcm", pts: 1, prompt: `<p>La masse volumique de l'eau vaut 1 g/cm³. Un objet de masse volumique 0,8 g/cm³ placé dans l'eau…</p>`, options: ["flotte", "coule", "reste entre deux eaux", "se dissout"], answer: 0, explain: "Un objet moins dense que l'eau (ρ < 1 g/cm³) flotte." });
+addS("s-photo", "sciences", "Vivant", { type: "multi", pts: 1.5, prompt: `<p>De quoi une plante verte a-t-elle besoin pour réaliser la <b>photosynthèse</b> ? Coche tout ce qui convient.</p>`, options: ["De la lumière", "De l'eau", "Du dioxyde de carbone", "Du dioxygène", "Du sucre venant du sol"], answers: [0, 1, 2], explain: "Lumière + eau + CO₂ (+ sels minéraux) → matière organique (glucose) + dioxygène rejeté. Le dioxygène est produit, pas consommé par la photosynthèse." });
+addS("s-prod", "sciences", "Vivant", { type: "qcm", pts: 1, prompt: `<p>Dans un écosystème, les <b>producteurs</b> sont…</p>`, options: ["les végétaux chlorophylliens", "les herbivores", "les décomposeurs", "les carnivores"], answer: 0, explain: "Ils fabriquent leur propre matière organique grâce à la lumière (photosynthèse)." });
+addS("s-decomp", "sciences", "Vivant", { type: "qcm", pts: 1, prompt: `<p>Quel est le rôle des <b>décomposeurs</b> (champignons, bactéries, vers de terre…) ?</p>`, options: ["Transformer la matière organique morte en matière minérale", "Fabriquer de la matière organique grâce à la lumière", "Manger les herbivores", "Polliniser les fleurs"], answer: 0, explain: "Ils recyclent la matière : les sels minéraux libérés seront à nouveau utilisés par les plantes." });
+addS("s-fleur", "sciences", "Vivant", { type: "match", pts: 1.5, prompt: `<p>Associe chaque partie de la fleur à son rôle.</p>`, items: [{ left: "Étamine", answer: "Produit le pollen (organe mâle)" }, { left: "Pistil", answer: "Contient les ovules (organe femelle)" }, { left: "Pétales", answer: "Attirent les insectes pollinisateurs" }, { left: "Sépales", answer: "Protègent le bouton floral" }], choices: ["Produit le pollen (organe mâle)", "Contient les ovules (organe femelle)", "Attirent les insectes pollinisateurs", "Protègent le bouton floral"], explain: "Après la pollinisation et la fécondation, l'ovule devient graine et le pistil devient fruit." });
+addS("s-pollin", "sciences", "Vivant", { type: "qcm", pts: 1, prompt: `<p>La <b>pollinisation</b>, c'est…</p>`, options: ["le transport du pollen des étamines jusqu'au pistil", "la transformation de la fleur en fruit", "la germination de la graine", "la chute des feuilles"], answer: 0, explain: "Le pollen est transporté par le vent ou les animaux (insectes surtout). Elle précède la fécondation." });
+addS("s-vert", "sciences", "Vivant", { type: "qcm", pts: 1, prompt: `<p>Quel critère permet de dire qu'un animal est un <b>vertébré</b> ?</p>`, options: ["Il possède une colonne vertébrale", "Il possède des pattes", "Il vit sur la terre ferme", "Il a le sang chaud"], answer: 0, explain: "Un vertébré a un squelette interne avec une colonne vertébrale (poissons, amphibiens, reptiles, oiseaux, mammifères)." });
+addS("s-cell", "sciences", "Vivant", { type: "qcm", pts: 1, prompt: `<p>Quelle affirmation est correcte ?</p>`, options: ["Tous les êtres vivants sont constitués d'une ou plusieurs cellules.", "Seuls les animaux sont constitués de cellules.", "Les plantes n'ont pas de cellules.", "Une cellule est visible à l'œil nu dans tous les cas."], answer: 0, explain: "La cellule est l'unité de base du vivant ; on l'observe généralement au microscope." });
+addS("s-champi", "sciences", "Vivant", { type: "qcm", pts: 1, prompt: `<p>Un champignon n'est pas un producteur car…</p>`, options: ["il ne possède pas de chlorophylle", "il pousse dans l'ombre", "il n'a pas de racines", "il est trop petit"], answer: 0, explain: "Sans chlorophylle, pas de photosynthèse : le champignon se nourrit de matière organique (souvent morte) → décomposeur." });
+addS("s-alv", "sciences", "Organisme humain", { type: "qcm", pts: 1, prompt: `<p>Où se font les échanges de gaz entre l'air et le sang ?</p>`, options: ["Dans les alvéoles pulmonaires", "Dans la trachée", "Dans le cœur", "Dans l'estomac"], answer: 0, explain: "Les alvéoles ont une paroi très fine entourée de capillaires : le dioxygène passe dans le sang, le CO₂ passe dans l'air." });
+addS("s-gr", "sciences", "Organisme humain", { type: "qcm", pts: 1, prompt: `<p>Quels éléments du sang transportent le <b>dioxygène</b> ?</p>`, options: ["Les globules rouges", "Les globules blancs", "Les plaquettes", "Le plasma seul"], answer: 0, explain: "Les globules rouges contiennent l'hémoglobine qui fixe le dioxygène. Les globules blancs défendent l'organisme, les plaquettes servent à la coagulation." });
+addS("s-absorp", "sciences", "Organisme humain", { type: "qcm", pts: 1, prompt: `<p>Dans quel organe les nutriments passent-ils principalement dans le sang ?</p>`, options: ["L'intestin grêle", "L'estomac", "L'œsophage", "Le gros intestin"], answer: 0, explain: "C'est l'absorption intestinale : la paroi de l'intestin grêle est très longue et plissée (villosités)." });
+addS("s-air", "sciences", "Organisme humain", { type: "match", pts: 1.5, prompt: `<p>Compare l'air <b>expiré</b> à l'air <b>inspiré</b>. L'air expiré contient…</p>`, items: [{ left: "Dioxygène", answer: "Moins" }, { left: "Dioxyde de carbone", answer: "Plus" }, { left: "Vapeur d'eau", answer: "Plus" }, { left: "Diazote", answer: "Autant" }], choices: ["Plus", "Moins", "Autant"], explain: "Le corps consomme du dioxygène et rejette du CO₂ et de la vapeur d'eau ; le diazote n'est pas utilisé." });
+addS("s-veine", "sciences", "Organisme humain", { type: "qcm", pts: 1, prompt: `<p>Les <b>veines</b> sont les vaisseaux sanguins qui…</p>`, options: ["ramènent le sang vers le cœur", "partent du cœur vers les organes", "relient les alvéoles à l'estomac", "transportent uniquement de l'air"], answer: 0, explain: "Artères : le sang part du cœur. Veines : le sang revient au cœur. Capillaires : échanges avec les cellules." });
+addS("s-coeur", "sciences", "Organisme humain", { type: "qcm", pts: 1, prompt: `<p>Le ventricule <b>gauche</b> du cœur envoie le sang…</p>`, options: ["vers tous les organes du corps (par l'aorte)", "vers les poumons", "vers l'oreillette droite", "vers le foie uniquement"], answer: 0, explain: "Cœur gauche : sang riche en dioxygène envoyé à tout le corps. Cœur droit : sang envoyé aux poumons." });
+addS("s-renouv", "sciences", "Énergie", { type: "multi", pts: 1.5, prompt: `<p>Coche les sources d'énergie <b>renouvelables</b>.</p>`, options: ["Le soleil", "Le vent", "La biomasse (bois)", "Le pétrole", "Le gaz naturel", "L'uranium"], answers: [0, 1, 2], explain: "Renouvelable = qui se reconstitue rapidement à l'échelle humaine. Pétrole, gaz et uranium sont des stocks épuisables." });
+addS("s-conduc", "sciences", "Énergie", { type: "qcm", pts: 1, prompt: `<p>On laisse une cuillère en métal dans une soupe chaude. Après un moment, le manche est chaud. Ce transfert de chaleur s'appelle…</p>`, options: ["la conduction", "la convection", "le rayonnement", "l'évaporation"], answer: 0, explain: "La chaleur se transmet de proche en proche dans la matière solide : c'est la conduction. Les métaux sont de bons conducteurs." });
+addS("s-serie", "sciences", "Énergie", { type: "qcm", pts: 1, prompt: `<p>Deux lampes sont branchées <b>en série</b>. Une lampe grille. Que se passe-t-il ?</p>`, options: ["L'autre lampe s'éteint aussi", "L'autre lampe brille davantage", "L'autre lampe continue de briller normalement", "La pile explose"], answer: 0, explain: "En série, il n'y a qu'un seul chemin pour le courant : si le circuit est ouvert, plus rien ne fonctionne. En dérivation, l'autre lampe resterait allumée." });
+addS("s-isol", "sciences", "Énergie", { type: "qcm", pts: 1, prompt: `<p>Lequel de ces matériaux est le meilleur <b>isolant thermique</b> ?</p>`, options: ["La laine de verre", "Le cuivre", "L'aluminium", "Le fer"], answer: 0, explain: "Les isolants emprisonnent de l'air, mauvais conducteur de chaleur. Les métaux sont de bons conducteurs." });
+addS("s-temoin", "sciences", "Démarche scientifique", { type: "qcm", pts: 1, prompt: `<p>Dans une expérience, à quoi sert le montage <b>témoin</b> ?</p>`, options: ["À comparer, pour montrer l'effet du seul facteur étudié", "À recommencer l'expérience si elle rate", "À mesurer la température de la pièce", "À rien, il est facultatif"], answer: 0, explain: "Le témoin est identique au montage testé sauf pour UN facteur : on peut alors attribuer la différence de résultat à ce facteur." });
+addS("s-hypo", "sciences", "Démarche scientifique", { type: "qcm", pts: 1, prompt: `<p>Une <b>hypothèse</b>, c'est…</p>`, options: ["une réponse possible à une question, qu'on va vérifier par une expérience", "le résultat final d'une expérience", "le matériel nécessaire", "une loi toujours vraie"], answer: 0, explain: "Démarche : question → hypothèse → expérience → résultats → conclusion (hypothèse confirmée ou rejetée)." });
+addS("s-facteur", "sciences", "Démarche scientifique", { type: "qcm", pts: 1, prompt: `<p>Pour savoir si la lumière influence la croissance d'une plante, Tom compare deux plantes. Que doit-il faire ?</p>`, options: ["Placer une plante à la lumière et une dans l'obscurité, tout le reste identique", "Arroser une plante et pas l'autre", "Mettre une plante au soleil et une au frigo", "Utiliser deux espèces de plantes différentes"], answer: 0, explain: "On ne change qu'un seul facteur à la fois (ici la lumière) ; sinon on ne sait pas quelle différence explique le résultat." });
+addG("sciences", "Air, eau et sol", () => { const V = ri(30, 90), o = 0.21 * V; return { type: "num", pts: 1, prompt: `<p>L'air contient environ 21 % de dioxygène.</p><p>Quel volume de dioxygène y a-t-il dans une classe de ${V} m³ d'air ?</p>`, fields: [num1("Volume de dioxygène :", o, fmt(o) + " m³", { tol: 0.06, suf: "m³" })], explain: `21 % de ${V} = ${V} × 0,21 = <b>${fmt(o)} m³</b>.` }; });
+addS("s-aircomp", "sciences", "Air, eau et sol", { type: "qcm", pts: 1, prompt: `<p>Quelle est la composition approximative de l'air sec ?</p>`, options: ["78 % de diazote, 21 % de dioxygène, 1 % d'autres gaz", "78 % de dioxygène, 21 % de diazote, 1 % d'autres gaz", "50 % de dioxygène, 50 % de dioxyde de carbone", "100 % de dioxygène"], answer: 0, explain: "Le diazote est le gaz le plus abondant. Le dioxyde de carbone ne représente qu'environ 0,04 %." });
+addS("s-cycle", "sciences", "Air, eau et sol", { type: "order", pts: 1.5, prompt: `<p>Remets dans l'ordre les étapes du cycle de l'eau, en partant de l'océan.</p>`, items: ["Évaporation de l'eau des océans", "Condensation de la vapeur en nuages", "Précipitations (pluie, neige)", "Ruissellement et infiltration vers les rivières et les nappes"], explain: "Le Soleil fournit l'énergie de l'évaporation ; la vapeur se refroidit en altitude et se condense ; l'eau retombe puis rejoint la mer." });
+addS("s-humus", "sciences", "Air, eau et sol", { type: "qcm", pts: 1, prompt: `<p>L'<b>humus</b>, la couche sombre à la surface du sol, provient…</p>`, options: ["de la décomposition des feuilles et des êtres vivants morts", "de l'érosion de la roche", "des pluies acides", "du sable apporté par le vent"], answer: 0, explain: "Les décomposeurs transforment la matière organique morte en humus, riche en éléments nutritifs pour les plantes." });
+addS("s-perm", "sciences", "Air, eau et sol", { type: "qcm", pts: 1, prompt: `<p>On verse la même quantité d'eau sur du sable et sur de l'argile. Quel sol laisse passer l'eau le plus vite ?</p>`, options: ["Le sable", "L'argile", "Les deux de la même façon", "Aucun des deux"], answer: 0, explain: "Le sable a de gros grains avec beaucoup d'espace entre eux : il est perméable. L'argile, aux grains très fins, retient l'eau." });
+addS("s-epur", "sciences", "Air, eau et sol", { type: "qcm", pts: 1, prompt: `<p>À quoi sert une station d'épuration ?</p>`, options: ["À nettoyer les eaux usées avant de les rejeter dans la rivière", "À fabriquer de l'eau salée", "À produire de l'électricité", "À stocker l'eau de pluie pour la boire directement"], answer: 0, explain: "Elle retire les déchets et une grande partie des polluants des eaux usées pour protéger les rivières." });
+addS("s-serre", "sciences", "L'homme et l'environnement", { type: "qcm", pts: 1, prompt: `<p>Quel gaz, rejeté en grande quantité par les activités humaines (voitures, chauffage, usines), renforce le plus l'effet de serre ?</p>`, options: ["Le dioxyde de carbone", "Le dioxygène", "Le diazote", "L'hélium"], answer: 0, explain: "La combustion des énergies fossiles (pétrole, gaz, charbon) rejette du CO₂, qui retient une partie de la chaleur de la Terre." });
+addS("s-gestes", "sciences", "L'homme et l'environnement", { type: "multi", pts: 1.5, prompt: `<p>Coche les gestes qui <b>réduisent</b> les émissions de dioxyde de carbone.</p>`, options: ["Aller à l'école à vélo ou à pied", "Baisser le chauffage d'un degré", "Manger des fruits et légumes de saison produits près de chez soi", "Laisser les appareils en veille", "Prendre l'avion pour de courts trajets"], answers: [0, 1, 2], explain: "Moins de carburant et moins d'énergie consommés = moins de CO₂. Les appareils en veille consomment de l'électricité ; l'avion émet beaucoup de CO₂ par passager." });
+addS("s-tri", "sciences", "L'homme et l'environnement", { type: "match", pts: 2, prompt: `<p>Dans quelle poubelle ou quel conteneur jettes-tu chaque déchet ?</p>`, items: [{ left: "Bouteille d'eau en plastique", answer: "Sac PMD" }, { left: "Canette de soda", answer: "Sac PMD" }, { left: "Vieux journal", answer: "Papiers-cartons" }, { left: "Bocal de confiture en verre", answer: "Bulle à verre" }, { left: "Épluchures de pommes de terre", answer: "Déchets organiques" }], choices: ["Sac PMD", "Papiers-cartons", "Bulle à verre", "Déchets organiques", "Sac tout-venant"], explain: "PMD = Plastiques, Métaux et cartons à boissons. Le tri permet de recycler la matière au lieu de la brûler ou de l'enfouir." });
+addS("s-biodiv", "sciences", "L'homme et l'environnement", { type: "qcm", pts: 1, prompt: `<p>Quelle est aujourd'hui l'une des principales causes de la diminution de la biodiversité ?</p>`, options: ["La destruction des milieux de vie (déforestation, bétonnage)", "L'augmentation du nombre de décomposeurs", "La photosynthèse", "La pollinisation par les abeilles"], answer: 0, explain: "Quand un milieu disparaît, les espèces qui y vivent perdent leur nourriture et leur abri." });
+// ouvertes sciences
+const OPEN_S = [
+  { theme: "Démarche scientifique", p: `<p>Tu veux vérifier que les graines ont besoin d'<b>eau</b> pour germer. Tu disposes de graines de haricot, de coton et de deux boîtes.</p><p><b>Décris l'expérience que tu réalises</b> et le résultat qui confirmerait ton hypothèse.</p>`, m: `Je prépare deux boîtes identiques avec du coton et le même nombre de graines, à la même température et à la même lumière. Boîte 1 : j'humidifie le coton. Boîte 2 (témoin) : je laisse le coton sec. Seule la présence d'eau change. Après quelques jours, si seules les graines de la boîte 1 ont germé, l'eau est nécessaire à la germination.`, c: ["prévoit deux montages dont un témoin (1 pt)", "un seul facteur change (l'eau), les autres conditions sont identiques (1 pt)", "décrit le résultat attendu et la conclusion (1 pt)"] },
+  { theme: "Vivant", p: `<p>Une plante verte est placée pendant trois semaines dans une armoire complètement noire. Elle jaunit puis dépérit.</p><p><b>Explique pourquoi.</b></p>`, m: `Sans lumière, la plante ne peut pas réaliser la photosynthèse. Elle ne fabrique donc plus de matière organique (glucose) dont elle a besoin pour vivre et grandir. Elle utilise ses réserves puis dépérit.`, c: ["cite la photosynthèse (1 pt)", "indique que la lumière est indispensable à la photosynthèse (1 pt)", "explique que la plante ne produit plus sa matière organique/nourriture (1 pt)"] },
+  { theme: "Organisme humain", p: `<p>Quand tu cours, tu respires plus vite et ton cœur bat plus vite.</p><p><b>Explique pourquoi.</b></p>`, m: `Pendant l'effort, les muscles travaillent plus et ont besoin de plus d'énergie. Pour la produire, ils consomment plus de dioxygène et de nutriments (glucose), apportés par le sang. La respiration accélère pour faire entrer plus de dioxygène et rejeter le CO₂ produit ; le cœur accélère pour faire circuler le sang plus vite vers les muscles.`, c: ["les muscles ont besoin de plus d'énergie (1 pt)", "ils consomment plus de dioxygène/nutriments et rejettent plus de CO₂ (1 pt)", "rôle du cœur (circulation plus rapide) et de la respiration (plus d'O₂ apporté) (1 pt)"] },
+  { theme: "Matière", p: `<p>Un glaçon flotte dans un verre d'eau.</p><p><b>Explique pourquoi</b> en utilisant la notion de masse volumique.</p>`, m: `La masse volumique de la glace (environ 0,92 g/cm³) est plus petite que celle de l'eau liquide (1 g/cm³). Un objet moins dense que le liquide dans lequel il est placé flotte. Quand l'eau gèle, son volume augmente alors que sa masse reste la même, donc sa masse volumique diminue.`, c: ["compare les masses volumiques glace/eau (1 pt)", "énonce : moins dense que le liquide → flotte (1 pt)", "valeurs correctes ou explication (volume qui augmente au gel) (1 pt)"] },
+  { theme: "Vivant", p: `<p>Dans une prairie : l'herbe est mangée par les lapins, et les lapins par les renards.</p><p>Une maladie fait disparaître presque tous les lapins. <b>Que va-t-il arriver aux renards et à l'herbe ? Explique.</b></p>`, m: `Les renards vont diminuer car ils n'ont plus assez de nourriture (ou devront chercher d'autres proies). L'herbe va augmenter car elle n'est presque plus mangée. Dans un réseau alimentaire, la disparition d'un maillon a des conséquences sur les autres.`, c: ["renards diminuent, avec explication (manque de nourriture) (1 pt)", "herbe augmente, avec explication (moins consommée) (1 pt)", "idée d'interdépendance des êtres vivants dans la chaîne (1 pt)"] },
+  { theme: "Matière", p: `<p>Tu as de l'eau salée. <b>Comment peux-tu récupérer le sel ?</b> Explique aussi pourquoi une filtration ne fonctionne pas.</p>`, m: `L'eau salée est un mélange homogène : le sel est dissous. Je fais chauffer (ou je laisse à l'air libre) pour évaporer l'eau : le sel reste au fond du récipient. La filtration ne marche pas car le sel dissous passe à travers le filtre avec l'eau ; elle ne retient que les solides non dissous.`, c: ["propose l'évaporation (ou la distillation) (1 pt)", "explique que l'eau s'évapore et que le sel reste (1 pt)", "explique que le sel est dissous (mélange homogène) et passe à travers le filtre (1 pt)"] },
+  { theme: "L'homme et l'environnement", p: `<p>Des forêts sont abattues pour agrandir des champs.</p><p><b>Explique pourquoi cela peut renforcer l'effet de serre.</b></p>`, m: `Les arbres absorbent du dioxyde de carbone pour réaliser la photosynthèse. Si on les abat, moins de CO₂ est retiré de l'air. De plus, si le bois est brûlé, il rejette du CO₂. Plus de CO₂ dans l'air renforce l'effet de serre et le réchauffement climatique.`, c: ["les arbres absorbent du CO₂ par la photosynthèse (1 pt)", "moins d'arbres → plus de CO₂ dans l'air (ou CO₂ rejeté si le bois brûle) (1 pt)", "lien CO₂ – effet de serre – réchauffement (1 pt)"] },
+  { theme: "Énergie", p: `<p>En hiver, une doudoune garde bien au chaud.</p><p><b>Explique comment elle fonctionne</b> du point de vue des transferts de chaleur.</p>`, m: `La doudoune ne produit pas de chaleur. Elle contient beaucoup d'air emprisonné (plumes, fibres) qui est un mauvais conducteur de chaleur : c'est un isolant thermique. Elle ralentit donc le transfert de chaleur du corps (chaud) vers l'extérieur (froid).`, c: ["la doudoune ne produit pas de chaleur, c'est le corps (1 pt)", "elle contient de l'air emprisonné, isolant (1 pt)", "elle limite le transfert de chaleur du chaud (corps) vers le froid (extérieur) (1 pt)"] },
+];
+OPEN_S.forEach((o, i) => addS("s-open" + i, "sciences", "Justifier", { type: "open", pts: 3, prompt: o.p, model: o.m, criteria: o.c, explain: "", realTheme: o.theme }));
+
+/* ============ composition d'un examen ============ */
+const QUOTAS = {
+  // répartition calquée sur la circulaire CE1D 2025-2026 : Nombres 40 %, Géométrie 30 %, Grandeurs 15 %, Traitement de données 15 %
+  maths: { "Nombres": 3, "Algèbre": 4, "Géométrie": 5, "Grandeurs": 3, "Traitement de données": 3, "Justifier": 2 },
+  sciences: { "Matière": 4, "Vivant": 3, "Organisme humain": 3, "Énergie": 2, "Air, eau et sol": 2, "L'homme et l'environnement": 2, "Démarche scientifique": 1, "Justifier": 2 },
+};
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("ce1d:" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("ce1d:" + k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem("ce1d:" + k); } catch (e) {} },
+};
+function prepare(q, subject, theme, id) {
+  q = JSON.parse(JSON.stringify(q)); q.id = id; q.subject = subject; q.theme = q.realTheme || theme; q.section = theme;
+  if (q.type === "qcm") { const order = shuffle(q.options.map((_, i) => i)); q.options = order.map(i => q.options[i]); q.answer = order.indexOf(q.answer); }
+  if (q.type === "multi") { const order = shuffle(q.options.map((_, i) => i)); q.options = order.map(i => q.options[i]); q.answers = q.answers.map(a => order.indexOf(a)); }
+  if (q.type === "match") { q.items = shuffle(q.items); q.choices = [...new Set(q.choices)]; if (q.choices.length > 3 && !q.choices.every(c => /^\d+$/.test(c))) q.choices = shuffle(q.choices); }
+  if (q.type === "order") { let o; do o = shuffle(q.items.map((_, i) => i)); while (o.every((v, i) => v === i)); q.start = o; }
+  return q;
+}
+function buildExam(subject, length) {
+  const seen = new Set(store.get("seen", []));
+  const subs = subject === "mixte" ? ["maths", "sciences"] : [subject];
+  const factor = (subject === "mixte" ? 0.5 : 1) * (length === "court" ? 0.5 : 1);
+  const qs = [];
+  subs.forEach(sb => {
+    Object.entries(QUOTAS[sb]).forEach(([theme, n]) => {
+      const k = Math.max(1, Math.round(n * factor));
+      const gens = shuffle(G.filter(g => g.subject === sb && g.theme === theme)).map(g => ({ kind: "g", g }));
+      const stat = S.filter(s => s.subject === sb && s.theme === theme);
+      const fresh = shuffle(stat.filter(s => !seen.has(s.id))), old = shuffle(stat.filter(s => seen.has(s.id)));
+      // on alterne générateurs (nombres nouveaux) et questions fixes jamais vues
+      const pool = []; const A = gens.slice(), B = fresh.map(s => ({ kind: "s", s })), C = old.map(s => ({ kind: "s", s }));
+      while (A.length || B.length) { if (A.length) pool.push(A.shift()); if (B.length) pool.push(B.shift()); }
+      pool.push(...C);
+      pool.slice(0, k).forEach(p => {
+        if (p.kind === "g") qs.push(prepare(p.g.make(), sb, theme, gid("g")));
+        else { qs.push(prepare(p.s.q, sb, theme, p.s.id)); seen.add(p.s.id); }
+      });
+    });
+  });
+  const all = S.map(s => s.id); let arr = [...seen]; if (arr.length > all.length * 0.8) arr = arr.slice(-Math.floor(all.length * 0.4));
+  store.set("seen", arr);
+  // ouvertes à la fin de chaque partie, comme dans le vrai carnet
+  const ordered = []; subs.forEach(sb => { const part = qs.filter(q => q.subject === sb); ordered.push(...shuffle(part.filter(q => q.type !== "open")), ...part.filter(q => q.type === "open")); });
+  return { id: gid("ex"), subject, length, started: Date.now(), questions: ordered, answers: {}, idx: 0, finished: null, grading: {} };
+}
+
+/* ============ correction ============ */
+const half = x => Math.round(x * 2) / 2;
+function isAnswered(q, v) {
+  if (v == null) return false;
+  if (q.type === "qcm") return v !== undefined && v !== null;
+  if (q.type === "multi") return v.length > 0;
+  if (q.type === "num") return v.some(x => String(x || "").trim());
+  if (q.type === "match") return v.some(x => x);
+  if (q.type === "order") return !!v.touched;
+  if (q.type === "open") return String(v).trim().length > 0;
+  return false;
+}
+function gradeAuto(q, v) {
+  const P = q.pts;
+  if (q.type === "qcm") return { pts: v === q.answer ? P : 0 };
+  if (q.type === "multi") { const sel = v || []; const good = sel.filter(i => q.answers.includes(i)).length, bad = sel.length - good; return { pts: half(Math.max(0, (good - bad) / q.answers.length) * P) }; }
+  if (q.type === "num") { const oks = q.fields.map((f, i) => checkField(f, (v || [])[i])); return { pts: half(oks.filter(Boolean).length / oks.length * P), oks }; }
+  if (q.type === "match") { const oks = q.items.map((it, i) => (v || [])[i] === it.answer); return { pts: half(oks.filter(Boolean).length / oks.length * P), oks }; }
+  if (q.type === "order") { const ord = (v && v.order) || q.start; const oks = ord.map((x, i) => x === i); const all = oks.every(Boolean); return { pts: all ? P : half(oks.filter(Boolean).length / oks.length * P * 0.6), oks }; }
+  return { pts: 0 };
+}
+function qPoints(ex, q) {
+  if (q.type !== "open") return gradeAuto(q, ex.answers[q.id]).pts;
+  const g = ex.grading[q.id]; return g && typeof g.pts === "number" ? g.pts : 0;
+}
+function totals(ex) {
+  let got = 0, max = 0; const th = {};
+  ex.questions.forEach(q => { const p = qPoints(ex, q); got += p; max += q.pts; const t = th[q.theme] || (th[q.theme] = { got: 0, max: 0, subject: q.subject }); t.got += p; t.max += q.pts; });
+  return { got, max, th };
+}
+
+/* ============ capacité IA (correction des réponses rédigées) ============ */
+let sampleFn; // undefined = pas encore su, null = indisponible
+const sampleReady = new Promise(res => {
+  (async () => { await 0; try { sampleFn = window.claude && window.claude.use ? await window.claude.use("sample") : null; } catch (e) { sampleFn = null; } res(); if (view === "results" && !grading) render(); })();
+  setTimeout(() => { if (sampleFn === undefined) { sampleFn = null; res(); if (view === "results" && !grading) render(); } }, 11000);
+});
+
+let grading = false;
+async function gradeOpen(ex) {
+  const open = ex.questions.filter(q => q.type === "open" && !ex.grading[q.id]);
+  const empty = open.filter(q => !isAnswered(q, ex.answers[q.id]));
+  empty.forEach(q => ex.grading[q.id] = { pts: 0, feedback: "Pas de réponse.", by: "auto" });
+  const todo = open.filter(q => isAnswered(q, ex.answers[q.id]));
+  if (!todo.length) { save(); render(); return; }
+  grading = true; render(); await sampleReady;
+  if (!sampleFn) grading = false;
+  if (!sampleFn) { todo.forEach(q => ex.grading[q.id] = { mode: "self" }); save(); render(); return; }
+  const tmp = document.createElement("div");
+  const list = todo.map(q => { tmp.innerHTML = q.prompt; return { id: q.id, max: q.pts, question: tmp.textContent.trim(), reponse_modele: q.model, criteres: q.criteria, reponse_eleve: String(ex.answers[q.id]).slice(0, 3000) }; });
+  const prompt = `Tu es correcteur de l'épreuve externe CE1D (Belgique, Fédération Wallonie-Bruxelles, fin de 2e secondaire). Corrige les réponses rédigées d'une élève de 13-14 ans.
+Règles :
+- Pour chaque question, attribue des points de 0 au maximum ("max"), par pas de 0,5, en suivant les critères. Accepte toute formulation correcte, même différente du modèle. Ne pénalise pas l'orthographe.
+- Sois juste et exigeant comme au vrai CE1D : une réponse sans justification ne reçoit pas les points de justification.
+- "feedback" : 1 à 3 phrases en français, adressées à l'élève (tutoiement), qui disent ce qui est juste et précisément ce qui manque.
+- Si la réponse est hors sujet ou vide de sens, 0 point.
+Réponds uniquement avec un tableau JSON : [{"id":"...","points":nombre,"feedback":"..."}]
+
+Questions :
+${JSON.stringify(list, null, 1)}`;
+  try {
+    const out = await sampleFn.json(prompt, { cache: false });
+    const arr = Array.isArray(out) ? out : [];
+    todo.forEach(q => {
+      const r = arr.find(x => x && x.id === q.id);
+      if (r && typeof r.points === "number") ex.grading[q.id] = { pts: Math.max(0, Math.min(q.pts, half(r.points))), feedback: String(r.feedback || ""), by: "ai" };
+      else ex.grading[q.id] = { mode: "self", err: true };
+    });
+  } catch (e) {
+    const msg = { not_granted: "La correction automatique n'a pas été autorisée.", rate_limited: "Trop de demandes pour le moment.", sampling_disabled: "La correction automatique n'est pas disponible sur ce compte." }[e && e.code] || "La correction automatique n'a pas répondu.";
+    todo.forEach(q => ex.grading[q.id] = { mode: "self", err: msg });
+  }
+  grading = false; save(); updateHistory(ex); render();
+}
+
+/* ============ état & sauvegarde ============ */
+let view = "home", ex = store.get("current", null), choice = { subject: "maths", length: "complet" }, confirmOpen = false, filter = "all";
+if (ex && ex.finished) view = "home";
+function save() { if (ex) store.set("current", ex); }
+function updateHistory(e) {
+  const t = totals(e); const h = store.get("history", []); const rec = { id: e.id, subject: e.subject, length: e.length, date: e.finished, got: t.got, max: t.max, th: t.th, time: e.finished - e.started };
+  const i = h.findIndex(x => x.id === e.id); if (i >= 0) h[i] = rec; else h.unshift(rec); store.set("history", h.slice(0, 30));
+}
+const subjName = s => ({ maths: "Mathématiques", sciences: "Sciences", mixte: "Maths + sciences" }[s]);
+const mmss = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); };
+const dateFr = t => new Date(t).toLocaleDateString("fr-BE", { day: "numeric", month: "short" }) + " · " + new Date(t).toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" });
+const on20 = (g, m) => m ? fmt(g / m * 20, 1) : "0";
+
+/* ============ rendu ============ */
+const app = $("#app"), topinfo = $("#topinfo");
+function render() {
+  if (view === "home") renderHome(); else if (view === "exam") renderExam(); else renderResults();
+}
+const ICON = {
+  up: `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3 3 9h10z" fill="currentColor"/></svg>`,
+  down: `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13 3 7h10z" fill="currentColor"/></svg>`,
+  sound: `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h3l4-3v10l-4-3H2z" fill="currentColor"/><path d="M11 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6 6 0 0 1 0 9" stroke="currentColor" fill="none" stroke-width="1.4"/></svg>`,
+};
+
+function renderHome() {
+  topinfo.innerHTML = "";
+  const h = store.get("history", []);
+  const agg = {}; h.slice(0, 8).forEach(r => Object.entries(r.th || {}).forEach(([k, v]) => { const a = agg[k] || (agg[k] = { got: 0, max: 0 }); a.got += v.got; a.max += v.max; }));
+  const themes = Object.entries(agg).filter(([, v]) => v.max > 0).map(([k, v]) => [k, v.got / v.max]).sort((a, b) => a[1] - b[1]);
+  const resume = ex && !ex.finished;
+  app.innerHTML = `
+  ${resume ? `<div class="resume"><span>Un examen de ${subjName(ex.subject).toLowerCase()} est en cours (${Object.keys(ex.answers).length} réponse(s) données).</span><button class="btn small" id="resume">Reprendre</button><button class="btn small" id="drop">Abandonner</button></div>` : ""}
+  <section class="hero">
+    <h1>Entraîne-toi au <mark>CE1D</mark> comme le jour J.</h1>
+    <p>Un carnet d'examen différent à chaque fois : les nombres changent, les questions sont tirées au hasard et les réponses rédigées sont corrigées avec des commentaires.</p>
+  </section>
+  <p class="label">1. Choisis la matière</p>
+  <div class="subjects" role="group" aria-label="Matière">
+    ${["maths", "sciences", "mixte"].map(s => `<button class="subj" data-s="${s}" aria-pressed="${choice.subject === s}"><b>${subjName(s)}</b><span>${{ maths: "Nombres et algèbre, géométrie, grandeurs, traitement de données", sciences: "Matière, vivant, corps humain, énergie, air-eau-sol, environnement", mixte: "La moitié de chaque carnet" }[s]}</span></button>`).join("")}
+  </div>
+  <p class="label">2. Choisis la durée</p>
+  <div class="startrow">
+    <div class="seg" role="group" aria-label="Durée">
+      <button data-l="complet" aria-pressed="${choice.length === "complet"}">Complet · ± 60 min</button>
+      <button data-l="court" aria-pressed="${choice.length === "court"}">Court · ± 25 min</button>
+    </div>
+    <button class="btn primary" id="start">Commencer l'examen</button>
+  </div>
+  <div class="cols">
+    <section class="panel"><h2>Tes derniers examens</h2>
+      ${h.length ? `<ul class="hist">${h.slice(0, 6).map(r => `<li><span><b>${subjName(r.subject)}</b> ${r.length === "court" ? "(court)" : ""}</span><span class="s">${on20(r.got, r.max)}/20</span><small>${dateFr(r.date)} · ${fmt(r.got, 1)}/${fmt(r.max, 1)} pts · ${mmss(r.time)}</small></li>`).join("")}</ul>` : `<p class="empty">Aucun examen pour l'instant. Ton premier résultat apparaîtra ici, avec ton temps.</p>`}
+    </section>
+    <section class="panel"><h2>À retravailler</h2>
+      ${themes.length ? `<div class="themes">${themes.slice(0, 6).map(([k, v]) => `<div class="row"><span>${k}</span><em>${Math.round(v * 100)} %</em><div class="bar ${v < .5 ? "low" : ""}"><i style="width:${Math.round(v * 100)}%"></i></div></div>`).join("")}</div>` : `<p class="empty">Après ton premier examen, tes thèmes les plus faibles s'afficheront ici, du plus faible au plus fort.</p>`}
+    </section>
+  </div>
+  <p class="note">Pour t'entraîner aussi sur les vraies épreuves des années précédentes, elles sont publiées gratuitement sur <a href="https://www.enseignement.be" target="_blank" rel="noopener">enseignement.be</a>.</p>`;
+  app.querySelectorAll(".subj").forEach(b => b.onclick = () => { choice.subject = b.dataset.s; renderHome(); });
+  app.querySelectorAll("[data-l]").forEach(b => b.onclick = () => { choice.length = b.dataset.l; renderHome(); });
+  $("#start").onclick = () => { ex = buildExam(choice.subject, choice.length); save(); view = "exam"; confirmOpen = false; render(); window.scrollTo(0, 0); };
+  if (resume) { $("#resume").onclick = () => { view = "exam"; render(); }; $("#drop").onclick = () => { store.del("current"); ex = null; renderHome(); }; }
+}
+
+let timer = null;
+function tick() { const t = $("#timer"); if (t && ex) t.textContent = mmss(Date.now() - ex.started); }
+function renderExam() {
+  const q = ex.questions[ex.idx], n = ex.questions.length, done = ex.questions.filter(x => isAnswered(x, ex.answers[x.id])).length;
+  topinfo.innerHTML = `<span class="chip ink">${subjName(ex.subject)}</span><span class="chip">${done}/${n} répondues</span><span class="chip" id="timer">${mmss(Date.now() - ex.started)}</span>`;
+  clearInterval(timer); timer = setInterval(tick, 1000);
+  const canSpeak = "speechSynthesis" in window;
+  app.innerHTML = `
+  <article class="sheet">
+    <div class="qhead">
+      <span class="qnum">Question ${ex.idx + 1} <small>/ ${n}</small></span>
+      <span class="chip">${esc(q.section === "Justifier" ? "Justifier" : q.theme)}</span>
+      <span class="chip">${fmt(q.pts, 1)} pt${q.pts > 1 ? "s" : ""}</span>
+      <span class="spacer"></span>
+      ${canSpeak ? `<button class="listen" id="speak">${ICON.sound} Écouter</button>` : ""}
+    </div>
+    <div class="prompt" id="prompt">${q.prompt}</div>
+    ${q.figure || ""}
+    <div class="answer" id="answer"></div>
+    <div class="nav">
+      <button class="btn ghost" id="prev" ${ex.idx === 0 ? "disabled" : ""}>Précédente</button>
+      ${ex.idx < n - 1 ? `<button class="btn primary" id="next">Suivante</button>` : `<button class="btn primary" id="finish">Remettre ma copie</button>`}
+    </div>
+    <div id="confirm"></div>
+  </article>
+  <nav class="dots" aria-label="Aller à la question">${ex.questions.map((x, i) => `<button class="dot ${isAnswered(x, ex.answers[x.id]) ? "done" : ""} ${i === ex.idx ? "cur" : ""}" data-i="${i}" aria-label="Question ${i + 1}">${i + 1}</button>`).join("")}</nav>
+  <div class="nav"><span class="hint">Tes réponses sont gardées sur cet appareil si tu fermes la page.</span><button class="btn small" id="finish2">Remettre ma copie</button></div>`;
+  renderAnswer(q);
+  const go = i => { ex.idx = i; save(); confirmOpen = false; renderExam(); window.scrollTo({ top: 0 }); };
+  $("#prev").onclick = () => go(ex.idx - 1);
+  if ($("#next")) $("#next").onclick = () => go(ex.idx + 1);
+  app.querySelectorAll(".dot").forEach(b => b.onclick = () => go(+b.dataset.i));
+  const fin = () => { confirmOpen = true; showConfirm(); };
+  if ($("#finish")) $("#finish").onclick = fin; $("#finish2").onclick = fin;
+  if (confirmOpen) showConfirm();
+  if (canSpeak) $("#speak").onclick = () => { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance($("#prompt").textContent); u.lang = "fr-BE"; u.rate = .95; speechSynthesis.speak(u); } catch (e) {} };
+}
+function showConfirm() {
+  const miss = ex.questions.map((x, i) => isAnswered(x, ex.answers[x.id]) ? null : i + 1).filter(Boolean);
+  $("#confirm").innerHTML = `<div class="confirm"><b>${miss.length ? `Il te reste ${miss.length} question(s) sans réponse : ${miss.join(", ")}.` : "Tu as répondu à toutes les questions."}</b><span>Une fois la copie remise, tu ne pourras plus modifier tes réponses.</span><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" id="doFinish">Oui, corriger ma copie</button><button class="btn ghost" id="noFinish">Continuer l'examen</button></div></div>`;
+  $("#confirm").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  $("#doFinish").onclick = () => { clearInterval(timer); try { speechSynthesis.cancel(); } catch (e) {} ex.finished = Date.now(); save(); updateHistory(ex); view = "results"; filter = "all"; render(); window.scrollTo(0, 0); gradeOpen(ex); };
+  $("#noFinish").onclick = () => { confirmOpen = false; $("#confirm").innerHTML = ""; };
+}
+function setAns(q, v) { ex.answers[q.id] = v; save(); const d = app.querySelector(`.dot[data-i="${ex.idx}"]`); if (d) d.classList.toggle("done", isAnswered(q, v)); const c = topinfo.children[1]; if (c) c.textContent = ex.questions.filter(x => isAnswered(x, ex.answers[x.id])).length + "/" + ex.questions.length + " répondues"; }
+function renderAnswer(q) {
+  const box = $("#answer"), v = ex.answers[q.id];
+  if (q.type === "qcm" || q.type === "multi") {
+    const multi = q.type === "multi";
+    box.innerHTML = (multi ? `<p class="hint">Plusieurs réponses possibles. Attention : une case cochée à tort enlève des points.</p>` : "") + q.options.map((o, i) => {
+      const on = multi ? (v || []).includes(i) : v === i;
+      return `<label class="opt ${on ? "on" : ""}"><input type="${multi ? "checkbox" : "radio"}" name="q-${q.id}" id="o-${q.id}-${i}" value="${i}" ${on ? "checked" : ""}><span>${o}</span></label>`;
+    }).join("");
+    box.querySelectorAll("input").forEach(inp => inp.onchange = () => {
+      if (multi) setAns(q, [...box.querySelectorAll("input:checked")].map(x => +x.value)); else setAns(q, +inp.value);
+      box.querySelectorAll(".opt").forEach(l => l.classList.toggle("on", l.querySelector("input").checked));
+    });
+  } else if (q.type === "num") {
+    const vals = v || q.fields.map(() => "");
+    const hasExpr = q.fields.some(f => f.kind === "expr" || f.kind === "frac");
+    box.innerHTML = q.fields.map((f, i) => `<div class="field"><label for="f-${q.id}-${i}">${f.label}</label><input id="f-${q.id}-${i}" class="${f.wide ? "wide" : ""}" inputmode="${f.kind === "num" ? "decimal" : "text"}" autocomplete="off" spellcheck="false" value="${esc(vals[i])}">${f.suf ? `<span class="suf">${f.suf}</span>` : ""}</div>`).join("")
+      + (hasExpr ? `<p class="hint">Tu peux écrire les fractions avec / (ex. 5/6) et les puissances avec ^ (ex. x^2).</p>` : `<p class="hint">Utilise la virgule pour les nombres décimaux.</p>`);
+    box.querySelectorAll("input").forEach((inp, i) => inp.oninput = () => { const a = (ex.answers[q.id] || q.fields.map(() => "")).slice(); a[i] = inp.value; setAns(q, a); });
+  } else if (q.type === "match") {
+    const vals = v || q.items.map(() => "");
+    box.innerHTML = `<div class="match">${q.items.map((it, i) => `<div class="mrow"><label for="m-${q.id}-${i}">${it.left}</label><select id="m-${q.id}-${i}"><option value="">— choisis —</option>${q.choices.map(c => `<option ${vals[i] === c ? "selected" : ""}>${esc(c)}</option>`).join("")}</select></div>`).join("")}</div>`;
+    box.querySelectorAll("select").forEach((s, i) => s.onchange = () => { const a = (ex.answers[q.id] || q.items.map(() => "")).slice(); a[i] = s.value; setAns(q, a); });
+  } else if (q.type === "order") {
+    const ord = (v && v.order) || q.start.slice();
+    box.innerHTML = `<p class="hint">Utilise les flèches pour déplacer les éléments.</p><ol class="order">${ord.map((k, i) => `<li><span class="n">${i + 1}</span><span class="t">${esc(q.items[k])}</span><button data-u="${i}" aria-label="Monter" ${i === 0 ? "disabled" : ""}>${ICON.up}</button><button data-d="${i}" aria-label="Descendre" ${i === ord.length - 1 ? "disabled" : ""}>${ICON.down}</button></li>`).join("")}</ol>`;
+    const mv = (i, j) => { const o = ord.slice(); [o[i], o[j]] = [o[j], o[i]]; setAns(q, { order: o, touched: true }); renderAnswer(q); const b = box.querySelector(`[data-${j < i ? "u" : "d"}="${j}"]`) || box.querySelector(`li:nth-child(${j + 1}) button`); if (b) b.focus(); };
+    box.querySelectorAll("[data-u]").forEach(b => b.onclick = () => mv(+b.dataset.u, +b.dataset.u - 1));
+    box.querySelectorAll("[data-d]").forEach(b => b.onclick = () => mv(+b.dataset.d, +b.dataset.d + 1));
+  } else if (q.type === "open") {
+    box.innerHTML = `<label class="hint" for="t-${q.id}">Rédige ta réponse en phrases complètes. Montre tes calculs.</label><textarea id="t-${q.id}" placeholder="Ta réponse…">${esc(v || "")}</textarea>`;
+    box.querySelector("textarea").oninput = e => setAns(q, e.target.value);
+  }
+}
+
+function showMine(q, v) {
+  if (!isAnswered(q, v)) return `<em>Pas de réponse</em>`;
+  if (q.type === "qcm") return q.options[v];
+  if (q.type === "multi") return `<ul>${v.map(i => `<li>${q.options[i]}</li>`).join("")}</ul>`;
+  if (q.type === "num") { const r = gradeAuto(q, v); return `<ul>${q.fields.map((f, i) => `<li>${f.label} ${esc(v[i] || "—")} <span class="${r.oks[i] ? "ok" : "ko"}">${r.oks[i] ? "✓" : "✗"}</span></li>`).join("")}</ul>`; }
+  if (q.type === "match") { const r = gradeAuto(q, v); return `<ul>${q.items.map((it, i) => `<li>${it.left} → ${esc(v[i] || "—")} <span class="${r.oks[i] ? "ok" : "ko"}">${r.oks[i] ? "✓" : "✗"}</span></li>`).join("")}</ul>`; }
+  if (q.type === "order") return (v.order || q.start).map(k => esc(q.items[k])).join(" → ");
+  if (q.type === "open") return esc(v).replace(/\n/g, "<br>");
+}
+function showRight(q) {
+  if (q.type === "qcm") return q.options[q.answer];
+  if (q.type === "multi") return `<ul>${q.answers.map(i => `<li>${q.options[i]}</li>`).join("")}</ul>`;
+  if (q.type === "num") return `<ul>${q.fields.map(f => `<li>${f.label} <b>${f.show}</b></li>`).join("")}</ul>`;
+  if (q.type === "match") return `<ul>${q.items.map(it => `<li>${it.left} → <b>${esc(it.answer)}</b></li>`).join("")}</ul>`;
+  if (q.type === "order") return q.items.map(esc).join(" → ");
+  if (q.type === "open") return esc(q.model);
+}
+function renderResults() {
+  clearInterval(timer);
+  const t = totals(ex), pct = t.max ? t.got / t.max : 0;
+  const pendingSelf = ex.questions.some(q => q.type === "open" && ex.grading[q.id] && ex.grading[q.id].mode === "self" && typeof ex.grading[q.id].pts !== "number");
+  const waitingAi = ex.questions.some(q => q.type === "open" && !ex.grading[q.id]);
+  topinfo.innerHTML = `<span class="chip ink">${subjName(ex.subject)}</span><span class="chip">Temps : ${mmss(ex.finished - ex.started)}</span>`;
+  const verdict = pct >= .8 ? ["Très solide.", "Tu es prête pour ce carnet. Continue à t'entraîner pour garder le rythme."] : pct >= .5 ? ["Réussi, mais on peut viser plus haut.", "Le CE1D se réussit à 50 %. Regarde tes erreurs ci-dessous : ce sont tes points faciles à gagner."] : ["Pas encore réussi.", "Le seuil est à 50 %. Commence par les thèmes en rouge et refais un examen court demain."];
+  const themes = Object.entries(t.th).sort((a, b) => a[1].got / a[1].max - b[1].got / b[1].max);
+  const list = ex.questions.map((q, i) => ({ q, i, p: qPoints(ex, q) })).filter(({ q, p }) => filter === "all" || (filter === "wrong" ? p < q.pts : true));
+  app.innerHTML = `
+  <section class="score">
+    <div class="bigscore" aria-label="Note">${on20(t.got, t.max)}<small>/ 20</small></div>
+    <div class="verdict"><h2>${verdict[0]}</h2><p>${verdict[1]}</p><p style="margin-top:6px"><b>${fmt(t.got, 1)} / ${fmt(t.max, 1)} points</b> · ${Math.round(pct * 100)} %</p></div>
+  </section>
+  ${grading || waitingAi ? `<div class="status"><span class="spin"></span>Correction de tes réponses rédigées en cours… La note se mettra à jour.</div>` : ""}
+  ${pendingSelf ? `<div class="status">Pour tes réponses rédigées, compare avec la réponse modèle et donne-toi une note honnête : c'est comme ça que le correcteur regardera s'il manque une étape.</div>` : ""}
+  <section class="panel"><h2>Par thème</h2><div class="themes">${themes.map(([k, v]) => `<div class="row"><span>${k}</span><em>${fmt(v.got, 1)}/${fmt(v.max, 1)}</em><div class="bar ${v.got / v.max < .5 ? "low" : ""}"><i style="width:${Math.round(v.got / v.max * 100)}%"></i></div></div>`).join("")}</div></section>
+  <div class="filters"><div class="seg"><button data-f="all" aria-pressed="${filter === "all"}">Toutes les questions</button><button data-f="wrong" aria-pressed="${filter === "wrong"}">Seulement mes erreurs</button></div><span class="spacer" style="flex:1"></span><button class="btn primary" id="again">Nouvel examen</button></div>
+  <div class="review">${list.map(({ q, i, p }) => {
+    const g = ex.grading[q.id] || {}, cls = p >= q.pts ? "good" : p === 0 ? "bad" : "part";
+    const self = q.type === "open" && g.mode === "self";
+    return `<article class="rq ${cls}">
+      <div class="top2"><b>Question ${i + 1}</b><span class="chip">${esc(q.theme)}</span><span class="pts">${self && typeof g.pts !== "number" ? "?" : fmt(p, 1)} / ${fmt(q.pts, 1)}</span></div>
+      <div class="prompt">${q.prompt}</div>${q.figure || ""}
+      <div class="ans"><div class="mine"><h4>Ta réponse</h4>${showMine(q, ex.answers[q.id])}</div><div class="right"><h4>${q.type === "open" ? "Réponse modèle" : "Bonne réponse"}</h4>${showRight(q)}</div></div>
+      ${q.type === "open" && g.by === "ai" ? `<p class="redpen">${esc(g.feedback)}</p>` : ""}
+      ${self ? `<div class="self"><span>${g.err && typeof g.err === "string" ? esc(g.err) + " " : ""}Ta note :</span>${[0, q.pts / 2, q.pts].map(v => `<button class="btn small" data-self="${q.id}" data-v="${v}" aria-pressed="${g.pts === v}">${fmt(v, 1)} pt</button>`).join("")}</div>` : ""}
+      ${q.explain ? `<div class="explain">${q.explain}</div>` : ""}
+      ${sampleFn && p < q.pts ? `<div><button class="btn small ghost" data-exp="${q.id}">Explique-moi autrement</button><p class="ai" id="ai-${q.id}" hidden></p></div>` : ""}
+    </article>`;
+  }).join("") || `<p class="empty">Aucune erreur : bravo !</p>`}</div>`;
+  app.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { filter = b.dataset.f; renderResults(); });
+  $("#again").onclick = () => { store.del("current"); ex = null; view = "home"; render(); window.scrollTo(0, 0); };
+  app.querySelectorAll("[data-self]").forEach(b => b.onclick = () => { ex.grading[b.dataset.self] = { mode: "self", pts: +b.dataset.v }; save(); updateHistory(ex); renderResults(); });
+  app.querySelectorAll("[data-exp]").forEach(b => b.onclick = () => explain(b, ex.questions.find(q => q.id === b.dataset.exp)));
+}
+async function explain(btn, q) {
+  const out = $("#ai-" + q.id); out.hidden = false; out.textContent = "Réflexion…"; btn.disabled = true;
+  const d = document.createElement("div"); d.innerHTML = q.prompt; const r = document.createElement("div"); r.innerHTML = showRight(q); const m = document.createElement("div"); m.innerHTML = showMine(q, ex.answers[q.id]);
+  const prompt = `Tu es un professeur patient qui prépare une élève belge de 2e secondaire au CE1D. Explique-lui en français, en 6 lignes maximum, avec des mots simples et en la tutoyant, pourquoi la bonne réponse est correcte et où se trouve son erreur. Donne une astuce pour ne plus se tromper. Pas de titre, pas de LaTeX : écris les calculs en texte simple.
+
+Question : ${d.textContent.trim()}
+Bonne réponse : ${r.textContent.trim()}
+Réponse de l'élève : ${m.textContent.trim()}`;
+  try { await sampleFn(prompt, { modelTier: "quick", onText: ({ text }) => { out.textContent = text; } }); }
+  catch (e) { out.textContent = e && e.code === "not_granted" ? "L'explication n'a pas été autorisée." : e && e.code === "rate_limited" ? "Trop de demandes. Réessaie dans un moment." : (e && e.text) || "L'explication n'a pas pu être générée. Réessaie."; }
+  btn.disabled = false;
+}
+if (ex && ex.finished && Object.keys(ex.grading).length === 0 && ex.questions.some(q => q.type === "open")) { /* examen remis mais non corrigé */ view = "results"; }
+render();
+if (view === "results") gradeOpen(ex);
+})();
+</script>
+
+</body>
+</html>
