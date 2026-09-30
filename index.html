@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Examen blanc CE1D maths et sciences pour la 2e secondaire (Fédération Wallonie-Bruxelles). Nouvelles questions à chaque examen.">
+<meta name="description" content="Examen blanc CE1D (maths, sciences, français, néerlandais) pour la 2e secondaire en Fédération Wallonie-Bruxelles. Nouvelles questions à chaque examen.">
 <style>html{color-scheme:light}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 <title>Examen blanc CE1D</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,7 +59,19 @@ button{cursor:pointer}
 .hero h1 mark{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;padding:0 4px}
 .hero p{margin:0;color:var(--muted);max-width:60ch}
 .label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 10px}
-.subjects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.subjects{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:22px}
+.subj.all{grid-column:1 / -1;border-style:dashed}
+.textdoc{background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:14px 18px;margin:8px 0 14px;font-size:16.5px;line-height:1.65;max-width:70ch}
+.textdoc h3{font-size:18px;margin:0 0 8px}
+.textdoc p{margin:0 0 10px}
+fieldset.sub{border:0;margin:0 0 14px;padding:0;display:grid;gap:8px;min-width:0}
+fieldset.sub legend{font-weight:700;margin-bottom:8px;padding:0}
+.sn{color:var(--ink);font-family:var(--f-display)}
+.audio{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:6px 0 10px;padding:14px;border:2px dashed var(--ink);border-radius:12px;background:var(--ink-soft)}
+.audio > div{flex-basis:100%}
+.conjv{font-style:italic}
+details.tr{font-size:15px}details.tr summary{cursor:pointer;color:var(--ink);font-weight:700}
+ol.subq{margin:0;padding-left:20px;font-size:15px;color:var(--muted)}
 .subj{text-align:left;border:2px solid var(--line);background:var(--card);border-radius:12px;padding:16px;display:grid;gap:6px;min-width:0}
 .subj b{font-family:var(--f-display);font-size:21px}
 .subj span{font-size:14px;color:var(--muted)}
@@ -179,6 +191,7 @@ textarea{width:100%;min-height:170px;border:1.5px solid var(--line);border-radiu
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
 @media (max-width:720px){
   .subjects{grid-template-columns:1fr}
+  .subj.all{grid-column:auto}
   .cols{grid-template-columns:1fr}
   .sheet{padding:16px}
   .ans{grid-template-columns:1fr}
@@ -307,6 +320,11 @@ function checkField(f, raw) {
       if (f.maxTerms && (topTerms(tree) > f.maxTerms || hasPar(tree))) return false;
       if (f.factor) { if (tree.k !== "mul") return false; const nums = tree.kids.filter(c => c.n.k === "num").map(c => c.n.v); return nums.some(v => Math.abs(v) === f.factor) || tree.kids.some(c => c.n.k === "neg" && c.n.a.k === "num" && c.n.a.v === f.factor); }
       return true;
+    }
+    if (f.kind === "word") {
+      const w = x => String(x).toLowerCase().replace(/[’`]/g, "'").replace(/\s+/g, " ").trim();
+      let t = w(s).replace(/^(que |qu')?(je |j'|tu |il |elle |on |nous |vous |ils |elles )/, "").replace(/[.!]$/, "").trim();
+      return f.accept.some(a => w(a) === t);
     }
     if (f.kind === "text") { const t = s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim(); return f.accept.some(a => t === a); }
   } catch (e) { return false; }
@@ -717,11 +735,307 @@ const OPEN_S = [
 ];
 OPEN_S.forEach((o, i) => addS("s-open" + i, "sciences", "Justifier", { type: "open", pts: 3, prompt: o.p, model: o.m, criteria: o.c, explain: "", realTheme: o.theme }));
 
+/* ============ outils pour questions à sous-questions ============ */
+const sq = (q, options, answer = 0) => ({ q, options, answer });
+const quiz = (pts, prompt, subs, extra = {}) => ({ type: "quiz", pts, prompt, subs, ...extra });
+const textBox = (title, body) => `<div class="textdoc">${title ? `<h3>${title}</h3>` : ""}${body.split(/\n\n/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("")}</div>`;
+const VF = ["Vrai", "Faux"];
+
+/* ============ MATHS : questions fixes supplémentaires ============ */
+addS("m-puiss", "maths", "Nombres", { type: "num", pts: 1, prompt: `<p>Calcule en utilisant les propriétés des puissances.</p><div class="expr">2³ × 2²</div>`, fields: [num1("=", 32)], explain: "On garde la base et on additionne les exposants : 2³ × 2² = 2⁵ = 32." });
+addS("m-arrondi", "maths", "Nombres", { type: "num", pts: 1, prompt: `<p>Arrondis <b>3,468</b> au dixième.</p>`, fields: [num1("≈", 3.5, "3,5")], explain: "Le chiffre des centièmes (6) est ≥ 5 : on arrondit le dixième vers le haut, 3,5." });
+addS("m-premier", "maths", "Nombres", { type: "qcm", pts: 1, prompt: `<p>Lequel de ces nombres est un <b>nombre premier</b> ?</p>`, options: ["29", "21", "27", "33"], answer: 0, explain: "29 n'a que deux diviseurs : 1 et 29. 21 = 3 × 7, 27 = 3 × 9, 33 = 3 × 11." });
+addS("m-pgcd", "maths", "Nombres", { type: "num", pts: 1.5, prompt: `<p>Complète.</p>`, fields: [num1("PGCD de 24 et 36 =", 12), num1("PPCM de 6 et 8 =", 24)], explain: "Diviseurs communs de 24 et 36 : 1, 2, 3, 4, 6, 12 → le plus grand est 12. Multiples communs de 6 et 8 : 24, 48… → le plus petit est 24." });
+addS("m-pct", "maths", "Grandeurs", { type: "num", pts: 1, prompt: `<p>Calcule <b>25 % de 80</b>.</p>`, fields: [num1("=", 20)], explain: "25 % = 1/4. Un quart de 80 = 20." });
+addS("m-cube", "maths", "Géométrie", { type: "num", pts: 1.5, prompt: `<p>Complète pour un <b>cube</b>.</p>`, fields: [num1("Nombre de faces :", 6), num1("Nombre d'arêtes :", 12), num1("Nombre de sommets :", 8)], explain: "Un cube a 6 faces carrées, 12 arêtes et 8 sommets." });
+addS("m-inegal", "maths", "Géométrie", { type: "qcm", pts: 1, prompt: `<p>Peut-on construire un triangle dont les côtés mesurent 3 cm, 4 cm et 9 cm ?</p>`, options: ["Non, car 3 + 4 est plus petit que 9", "Oui, n'importe quelles longueurs conviennent", "Oui, c'est un triangle rectangle", "Non, car 9 n'est pas un multiple de 3"], answer: 0, explain: "Dans un triangle, chaque côté est plus petit que la somme des deux autres. Ici 3 + 4 = 7 < 9 : impossible." });
+addS("m-droites", "maths", "Géométrie", { type: "match", pts: 1.5, prompt: `<p>Associe chaque droite remarquable du triangle à sa définition.</p>`, items: [{ left: "Hauteur", answer: "Passe par un sommet, perpendiculaire au côté opposé" }, { left: "Médiane", answer: "Passe par un sommet et le milieu du côté opposé" }, { left: "Bissectrice", answer: "Partage un angle en deux angles égaux" }, { left: "Médiatrice", answer: "Perpendiculaire à un côté en son milieu" }], choices: ["Passe par un sommet, perpendiculaire au côté opposé", "Passe par un sommet et le milieu du côté opposé", "Partage un angle en deux angles égaux", "Perpendiculaire à un côté en son milieu"], explain: "Hauteur : angle droit. Médiane : milieu. Bissectrice : angle coupé en deux. Médiatrice : milieu ET angle droit." });
+addS("m-sym", "maths", "Géométrie", { type: "multi", pts: 1.5, prompt: `<p>Une symétrie centrale (ou orthogonale) conserve… Coche tout ce qui convient.</p>`, options: ["les longueurs", "l'amplitude des angles", "l'alignement des points", "la position de la figure"], answers: [0, 1, 2], explain: "Les isométries conservent longueurs, angles, parallélisme et alignement. La figure change de place." });
+addS("m-moyinv", "maths", "Traitement de données", { type: "num", pts: 1, prompt: `<p>La moyenne de 4 notes est 12. Quelle est la somme de ces 4 notes ?</p>`, fields: [num1("Somme :", 48)], explain: "Moyenne = somme : nombre de notes, donc somme = 12 × 4 = 48." });
+addS("m-effectif", "maths", "Traitement de données", { type: "qcm", pts: 1, prompt: `<p>Dans une enquête, 8 élèves sur 32 préfèrent le basket. Quelle est la <b>fréquence</b> de cette réponse ?</p>`, options: ["25 %", "8 %", "32 %", "4 %"], answer: 0, explain: "Fréquence = effectif : effectif total = 8 : 32 = 0,25 = 25 %." });
+
+/* ============ SCIENCES : questions fixes supplémentaires ============ */
+addS("s-diss", "sciences", "Matière", { type: "qcm", pts: 1, prompt: `<p>On dissout du sucre dans de l'eau. Le sucre…</p>`, options: ["est toujours présent, dispersé dans l'eau", "a disparu", "s'est transformé en eau", "est devenu un gaz"], answer: 0, explain: "C'est une dissolution : l'eau a toujours un goût sucré et la masse totale est conservée." });
+addS("s-eprou", "sciences", "Matière", { type: "match", pts: 1.5, prompt: `<p>Quel instrument utilise-t-on pour mesurer…</p>`, items: [{ left: "le volume d'un liquide", answer: "Une éprouvette graduée" }, { left: "la masse d'un objet", answer: "Une balance" }, { left: "la température", answer: "Un thermomètre" }, { left: "une durée", answer: "Un chronomètre" }], choices: ["Une éprouvette graduée", "Une balance", "Un thermomètre", "Un chronomètre", "Une règle"], explain: "Chaque grandeur a son instrument et son unité : volume (mL), masse (g), température (°C), durée (s)." });
+addS("s-caillou", "sciences", "Matière", { type: "qcm", pts: 1, prompt: `<p>Une éprouvette contient 50 mL d'eau. On y plonge un caillou : le niveau monte à 68 mL. Quel est le volume du caillou ?</p>`, options: ["18 cm³", "68 cm³", "50 cm³", "118 cm³"], answer: 0, explain: "Le caillou déplace son propre volume d'eau : 68 − 50 = 18 mL = 18 cm³." });
+addS("s-buee", "sciences", "Matière", { type: "qcm", pts: 1, prompt: `<p>De la buée apparaît sur un miroir froid après une douche chaude. C'est…</p>`, options: ["la vapeur d'eau de l'air qui se liquéfie", "l'eau du miroir qui s'évapore", "une transformation chimique", "de la fumée"], answer: 0, explain: "La vapeur d'eau (gaz, invisible) se refroidit au contact du miroir et redevient liquide : liquéfaction (condensation)." });
+addS("s-germ", "sciences", "Vivant", { type: "multi", pts: 1.5, prompt: `<p>De quoi une graine a-t-elle besoin pour <b>germer</b> ? Coche tout ce qui convient.</p>`, options: ["D'eau", "D'air (dioxygène)", "D'une température adaptée", "De lumière", "D'engrais"], answers: [0, 1, 2], explain: "La graine contient ses réserves : elle n'a pas besoin de lumière ni d'engrais pour germer. La lumière devient nécessaire ensuite, pour la photosynthèse." });
+addS("s-racine", "sciences", "Vivant", { type: "match", pts: 1.5, prompt: `<p>Associe chaque organe de la plante à son rôle principal.</p>`, items: [{ left: "Racines", answer: "Absorbent l'eau et les sels minéraux" }, { left: "Feuilles", answer: "Réalisent la photosynthèse" }, { left: "Tige", answer: "Transporte la sève et soutient la plante" }, { left: "Fleur", answer: "Permet la reproduction" }], choices: ["Absorbent l'eau et les sels minéraux", "Réalisent la photosynthèse", "Transporte la sève et soutient la plante", "Permet la reproduction"], explain: "Racines → absorption ; feuilles → photosynthèse et échanges gazeux ; tige → transport ; fleur → reproduction." });
+addS("s-omni", "sciences", "Vivant", { type: "match", pts: 1.5, prompt: `<p>Quel est le régime alimentaire de chaque animal ?</p>`, items: [{ left: "Lapin", answer: "Herbivore" }, { left: "Renard", answer: "Carnivore" }, { left: "Sanglier", answer: "Omnivore" }, { left: "Hérisson", answer: "Insectivore" }], choices: ["Herbivore", "Carnivore", "Omnivore", "Insectivore"], explain: "Herbivore : végétaux. Carnivore : autres animaux. Omnivore : végétaux et animaux. Insectivore : surtout des insectes." });
+addS("s-grenouille", "sciences", "Vivant", { type: "order", pts: 1.5, prompt: `<p>Remets dans l'ordre le développement de la grenouille.</p>`, items: ["Œuf", "Têtard sans pattes", "Têtard avec pattes", "Jeune grenouille"], explain: "La grenouille subit une métamorphose : l'animal change fortement de forme au cours de son développement." });
+addS("s-hiber", "sciences", "Vivant", { type: "qcm", pts: 1, prompt: `<p>Pourquoi le hérisson hiberne-t-il en hiver ?</p>`, options: ["Parce que sa nourriture (insectes, vers) devient rare", "Parce qu'il a peur de la neige", "Parce qu'il doit pondre ses œufs", "Parce que ses piquants tombent"], answer: 0, explain: "L'hibernation réduit fortement ses besoins en énergie pendant la période où il ne trouve presque rien à manger." });
+addS("s-feco", "sciences", "Vivant", { type: "qcm", pts: 1, prompt: `<p>Chez les animaux, la <b>fécondation</b> est…</p>`, options: ["l'union d'un spermatozoïde et d'un ovule", "la ponte des œufs", "la naissance du petit", "le transport du pollen"], answer: 0, explain: "La fécondation donne une cellule-œuf, qui se développe ensuite en embryon." });
+addS("s-bouture", "sciences", "Vivant", { type: "qcm", pts: 1, prompt: `<p>On plante un morceau de tige de géranium et il donne une nouvelle plante. Comment s'appelle ce mode de reproduction ?</p>`, options: ["Le bouturage (reproduction asexuée)", "La pollinisation", "La fécondation", "La germination"], answer: 0, explain: "Sans graine ni fécondation : c'est une reproduction asexuée. La nouvelle plante est identique à la plante de départ." });
+addS("s-nutri", "sciences", "Organisme humain", { type: "match", pts: 1.5, prompt: `<p>Associe chaque type d'aliment à son rôle principal.</p>`, items: [{ left: "Glucides (pain, pâtes)", answer: "Fournir de l'énergie" }, { left: "Protéines (viande, œufs, lentilles)", answer: "Construire et réparer le corps" }, { left: "Fruits et légumes", answer: "Apporter vitamines et fibres" }, { left: "Eau", answer: "Hydrater l'organisme" }], choices: ["Fournir de l'énergie", "Construire et réparer le corps", "Apporter vitamines et fibres", "Hydrater l'organisme"], explain: "Une alimentation équilibrée combine ces groupes d'aliments chaque jour." });
+addS("s-enzyme", "sciences", "Organisme humain", { type: "qcm", pts: 1, prompt: `<p>Pendant la digestion, les sucs digestifs…</p>`, options: ["transforment les aliments en nutriments assez petits pour passer dans le sang", "font passer les aliments directement dans les poumons", "fabriquent de l'oxygène", "détruisent tous les nutriments"], answer: 0, explain: "C'est la digestion chimique. La digestion mécanique (dents, estomac) découpe et brasse les aliments." });
+addS("s-muscle", "sciences", "Organisme humain", { type: "qcm", pts: 1, prompt: `<p>Pour plier le bras, le biceps…</p>`, options: ["se contracte et tire sur l'os", "se relâche et pousse l'os", "se transforme en os", "ne joue aucun rôle"], answer: 0, explain: "Un muscle ne peut que tirer en se contractant. Le triceps, de l'autre côté, se contracte pour tendre le bras." });
+addS("s-rein", "sciences", "Organisme humain", { type: "qcm", pts: 1, prompt: `<p>Quel est le rôle des <b>reins</b> ?</p>`, options: ["Filtrer le sang et produire l'urine", "Digérer les graisses", "Pomper le sang", "Échanger les gaz respiratoires"], answer: 0, explain: "Les reins éliminent les déchets du sang, qui sont évacués dans l'urine." });
+addS("s-sang", "sciences", "Organisme humain", { type: "order", pts: 1.5, prompt: `<p>Remets dans l'ordre le trajet du sang pauvre en dioxygène qui revient des organes.</p>`, items: ["Organes (muscles…)", "Veines caves", "Cœur droit", "Artère pulmonaire", "Poumons"], explain: "Le sang pauvre en dioxygène revient au cœur droit, qui l'envoie aux poumons pour se recharger en dioxygène." });
+addS("s-colonne", "sciences", "Organisme humain", { type: "multi", pts: 1.5, prompt: `<p>Quels sont les rôles du squelette ? Coche tout ce qui convient.</p>`, options: ["Soutenir le corps", "Protéger des organes (cerveau, cœur…)", "Permettre le mouvement avec les muscles", "Digérer les aliments"], answers: [0, 1, 2], explain: "Le crâne protège le cerveau, la cage thoracique protège le cœur et les poumons, la colonne vertébrale protège la moelle épinière." });
+addS("s-convec", "sciences", "Énergie", { type: "qcm", pts: 1, prompt: `<p>Au-dessus d'un radiateur, l'air chaud monte. Pourquoi ?</p>`, options: ["L'air chaud est moins dense que l'air froid", "L'air chaud est plus lourd", "Le radiateur souffle l'air", "L'air chaud contient plus de dioxygène"], answer: 0, explain: "En se réchauffant, l'air se dilate : sa masse volumique diminue et il monte. C'est la convection." });
+addS("s-conducelec", "sciences", "Énergie", { type: "multi", pts: 1.5, prompt: `<p>Coche les matériaux qui conduisent bien le courant électrique.</p>`, options: ["Le cuivre", "L'aluminium", "Le fer", "Le plastique", "Le bois sec", "Le verre"], answers: [0, 1, 2], explain: "Les métaux sont de bons conducteurs. Plastique, bois sec et verre sont des isolants électriques (d'où les gaines en plastique autour des fils)." });
+addS("s-circuit", "sciences", "Énergie", { type: "qcm", pts: 1, prompt: `<p>Une lampe s'allume quand…</p>`, options: ["elle fait partie d'un circuit fermé relié aux deux bornes de la pile", "elle touche une seule borne de la pile", "l'interrupteur est ouvert", "le circuit contient un isolant"], answer: 0, explain: "Le courant doit pouvoir circuler en boucle, d'une borne de la pile à l'autre." });
+addS("s-hydro", "sciences", "Énergie", { type: "qcm", pts: 1, prompt: `<p>Dans une centrale hydroélectrique, l'énergie est convertie…</p>`, options: ["de l'énergie de mouvement de l'eau en énergie électrique", "de l'énergie électrique en énergie lumineuse", "de l'énergie chimique en énergie thermique", "de l'énergie nucléaire en énergie électrique"], answer: 0, explain: "L'eau qui tombe fait tourner une turbine reliée à un alternateur qui produit de l'électricité." });
+addS("s-watt", "sciences", "Énergie", { type: "match", pts: 1.5, prompt: `<p>Associe chaque grandeur à son unité.</p>`, items: [{ left: "Énergie", answer: "Joule (J)" }, { left: "Puissance", answer: "Watt (W)" }, { left: "Température", answer: "Degré Celsius (°C)" }, { left: "Masse", answer: "Kilogramme (kg)" }], choices: ["Joule (J)", "Watt (W)", "Degré Celsius (°C)", "Kilogramme (kg)", "Litre (L)"], explain: "La facture d'électricité compte l'énergie en kilowattheures (kWh), une autre unité d'énergie." });
+addS("s-douce", "sciences", "Air, eau et sol", { type: "qcm", pts: 1, prompt: `<p>Environ quelle part de l'eau présente sur Terre est de l'<b>eau douce</b> ?</p>`, options: ["Environ 3 %", "Environ 50 %", "Environ 97 %", "100 %"], answer: 0, explain: "97 % de l'eau est salée (océans). Et la plus grande partie de l'eau douce est gelée dans les glaciers : l'eau potable est précieuse." });
+addS("s-nappe", "sciences", "Air, eau et sol", { type: "qcm", pts: 1, prompt: `<p>Une <b>nappe phréatique</b>, c'est…</p>`, options: ["de l'eau souterraine qui remplit les espaces d'une couche de roche ou de sol", "un lac en surface", "un nuage bas", "une rivière qui coule sous un pont"], answer: 0, explain: "L'eau de pluie s'infiltre et s'accumule en profondeur. En Wallonie, une grande partie de l'eau du robinet vient des nappes." });
+addS("s-altitude", "sciences", "Air, eau et sol", { type: "qcm", pts: 1, prompt: `<p>Quand on monte en altitude, la pression de l'air…</p>`, options: ["diminue", "augmente", "reste la même", "devient nulle dès 100 m"], answer: 0, explain: "Plus on monte, moins il y a d'air au-dessus de nous : la pression atmosphérique diminue." });
+addS("s-erosion", "sciences", "Air, eau et sol", { type: "qcm", pts: 1, prompt: `<p>Qu'est-ce qui protège le mieux un sol en pente contre l'érosion par la pluie ?</p>`, options: ["Une couverture de végétation (herbe, arbres)", "Un sol nu labouré", "Du sable sec", "L'absence de racines"], answer: 0, explain: "Les racines retiennent la terre et les plantes freinent l'eau qui ruisselle." });
+addS("s-mer", "sciences", "Air, eau et sol", { type: "qcm", pts: 1, prompt: `<p>Pourquoi ne peut-on pas boire l'eau de mer ?</p>`, options: ["Elle est trop salée pour notre organisme", "Elle est toujours trop froide", "Elle ne contient pas d'eau", "Elle est radioactive"], answer: 0, explain: "Boire de l'eau très salée déshydrate le corps. Il faudrait la dessaler (par exemple par distillation)." });
+addS("s-invasive", "sciences", "L'homme et l'environnement", { type: "qcm", pts: 1, prompt: `<p>Une <b>espèce exotique envahissante</b> est…</p>`, options: ["une espèce venue d'ailleurs qui se répand et menace les espèces locales", "une espèce protégée", "une espèce qui a disparu", "un animal domestique"], answer: 0, explain: "Exemples en Belgique : la renouée du Japon ou la coccinelle asiatique, qui concurrencent les espèces d'ici." });
+addS("s-eutro", "sciences", "L'homme et l'environnement", { type: "qcm", pts: 1, prompt: `<p>Trop d'engrais agricoles arrivent dans un étang. Que risque-t-il de se passer ?</p>`, options: ["Les algues prolifèrent, puis l'eau manque de dioxygène et les poissons meurent", "Les poissons grandissent plus vite", "L'eau devient potable", "Rien du tout"], answer: 0, explain: "C'est l'eutrophisation : les algues se développent trop, puis leur décomposition consomme le dioxygène de l'eau." });
+addS("s-pollair", "sciences", "L'homme et l'environnement", { type: "qcm", pts: 1, prompt: `<p>En ville, quelle est l'une des principales sources de pollution de l'air ?</p>`, options: ["Le trafic routier", "Les arbres des parcs", "Les pistes cyclables", "La pluie"], answer: 0, explain: "Les moteurs rejettent des particules fines et des gaz polluants. Les zones de basses émissions (LEZ) de Bruxelles visent à les réduire." });
+addS("s-recy", "sciences", "L'homme et l'environnement", { type: "multi", pts: 1.5, prompt: `<p>Pourquoi est-il utile de recycler le papier ? Coche tout ce qui convient.</p>`, options: ["On coupe moins d'arbres", "On consomme moins d'eau et d'énergie que pour fabriquer du papier neuf", "On produit moins de déchets à brûler", "Le papier recyclé ne s'use jamais"], answers: [0, 1, 2], explain: "Le recyclage économise des ressources. Mais les fibres s'abîment : on ne peut pas recycler le papier à l'infini." });
+addS("s-repet", "sciences", "Démarche scientifique", { type: "qcm", pts: 1, prompt: `<p>Pourquoi un scientifique répète-t-il plusieurs fois la même expérience ?</p>`, options: ["Pour vérifier que les résultats sont fiables", "Pour perdre moins de temps", "Pour changer d'hypothèse à chaque fois", "Parce que la première fois est toujours fausse"], answer: 0, explain: "Si l'on obtient des résultats semblables à chaque fois, la conclusion est plus solide." });
+addS("s-obs", "sciences", "Démarche scientifique", { type: "qcm", pts: 1, prompt: `<p>Laquelle de ces phrases est une <b>observation</b> (et pas une interprétation) ?</p>`, options: ["Le liquide devient trouble.", "Une réaction chimique a eu lieu.", "Le gaz produit est du dioxyde de carbone.", "La température a sûrement baissé."], answer: 0, explain: "Une observation décrit ce que l'on voit ou mesure. Une interprétation explique ou suppose." });
+addS("s-axe", "sciences", "Démarche scientifique", { type: "qcm", pts: 1, prompt: `<p>Dans un graphique, où place-t-on habituellement la variable qu'on fait varier (variable indépendante) ?</p>`, options: ["Sur l'axe horizontal", "Sur l'axe vertical", "Dans le titre", "On ne la place pas"], answer: 0, explain: "Axe horizontal : ce qu'on fait varier (ex. le temps). Axe vertical : ce qu'on mesure. Sans oublier les unités !" });
+
+/* ============ FRANÇAIS ============ */
+const TXT_BUS = textBox("Le dernier bus", `Il était dix-neuf heures passées quand Yasmine sortit enfin de la bibliothèque. Le ciel de novembre était déjà noir et une pluie fine faisait briller les pavés de la place. Elle courut jusqu'à l'arrêt, son sac trop lourd rebondissant contre son dos, juste à temps pour voir les feux arrière du 46 disparaître au coin de la rue.
+— Évidemment, soupira-t-elle.
+
+Le prochain bus ne passait que dans quarante minutes. Elle aurait pu appeler sa mère, mais elle savait déjà ce qu'elle entendrait : « Je t'avais dit de ne pas rester si tard. » Alors elle s'assit sur le banc mouillé et sortit son cahier de néerlandais. Autant réviser.
+
+Au bout de dix minutes, un vieil homme s'installa à côté d'elle. Il jeta un coup d'œil à son cahier et sourit.
+— Goedenavond, dit-il avec un accent parfait. Vous étudiez le néerlandais ?
+Yasmine hésita, puis répondit en rougissant : « Ja… een beetje. »
+
+Quand le bus arriva enfin, elle fut presque déçue. En quarante minutes, elle avait appris plus de mots qu'en une semaine de cours.`);
+const TXT_ABEILLES = textBox("Les abeilles, bien plus que du miel", `On associe souvent les abeilles au miel. Pourtant, leur rôle le plus important est ailleurs : en passant de fleur en fleur pour récolter le nectar, elles transportent le pollen et permettent la reproduction de nombreuses plantes. Selon l'Organisation des Nations unies pour l'alimentation et l'agriculture (FAO), environ trois quarts des principales cultures alimentaires dans le monde dépendent au moins en partie des pollinisateurs.
+
+En Belgique, on compte environ 400 espèces d'abeilles. La plupart ne vivent pas dans des ruches : ce sont des abeilles sauvages, souvent solitaires, qui nichent dans le sol ou dans des tiges creuses.
+
+Or ces insectes sont menacés. Les pesticides, la disparition des haies et des prairies fleuries, ainsi que certaines maladies réduisent leurs populations. Chacun peut pourtant agir : laisser une partie de son jardin fleurir librement, planter des espèces locales ou installer un « hôtel à insectes » sont des gestes simples qui leur offrent nourriture et abri.`);
+const TXT_GSM = textBox("Courrier des lecteurs : faut-il interdire le téléphone à l'école ?", `Depuis quelques années, de plus en plus d'écoles interdisent le téléphone portable, même pendant les récréations. Je suis élève de 3e secondaire et je pense que c'est une bonne décision.
+
+D'abord, sans téléphone, les récréations redeviennent des moments d'échange. Au lieu de fixer un écran, on discute, on joue, on rit ensemble. Ensuite, les notifications nous empêchent de nous concentrer : même éteint dans le sac, le téléphone occupe nos pensées. Enfin, l'interdiction protège les élèves du harcèlement : moins de photos prises en cachette, moins de moqueries qui circulent sur les réseaux pendant la journée.
+
+Certains diront que le téléphone est utile en cas d'urgence. C'est vrai, mais l'école dispose d'un secrétariat et d'un téléphone fixe, et les parents peuvent toujours joindre leur enfant par ce biais.
+
+L'école doit rester un lieu où l'on apprend à vivre ensemble. Poser son téléphone quelques heures par jour, ce n'est pas une punition : c'est une chance.
+
+Inès, 15 ans`);
+addS("f-bus", "francais", "Lecture", quiz(6, `<p>Lis le texte puis réponds aux questions.</p>` + TXT_BUS, [
+  sq("Pourquoi Yasmine rate-t-elle le bus ?", ["Elle est arrivée à l'arrêt juste trop tard", "Elle s'est trompée d'arrêt", "Le bus était en avance", "Elle attendait sa mère"]),
+  sq("Pourquoi n'appelle-t-elle pas sa mère ?", ["Elle ne veut pas entendre de reproche", "Son téléphone n'a plus de batterie", "Sa mère travaille de nuit", "Elle n'a pas de téléphone"]),
+  sq("À quelle saison se passe l'histoire ?", ["En automne", "En hiver", "Au printemps", "En été"]),
+  sq("« — Évidemment, soupira-t-elle. » Que ressent Yasmine à ce moment ?", ["De l'agacement, avec résignation", "De la joie", "De la peur", "Une bonne surprise"]),
+  sq("Que ressent Yasmine à la fin du texte ?", ["Elle regrette presque que l'attente soit finie", "Elle est soulagée de partir enfin", "Elle est fâchée contre le vieil homme", "Elle a peur de rentrer"]),
+  sq("Qui raconte l'histoire ?", ["Un narrateur extérieur à l'histoire", "Yasmine", "Le vieil homme", "La mère de Yasmine"]),
+], { explain: "Relis toujours la phrase exacte du texte qui justifie ta réponse. Le narrateur dit « elle » : il ne participe pas à l'histoire." }));
+addS("f-abeilles", "francais", "Lecture", quiz(6, `<p>Lis le texte puis réponds aux questions.</p>` + TXT_ABEILLES, [
+  sq("Selon le texte, quel est le rôle le plus important des abeilles ?", ["Polliniser les plantes", "Produire du miel", "Manger les insectes nuisibles", "Fabriquer de la cire"]),
+  sq("Dans le texte, que signifie « solitaires » ?", ["Qui vivent seules, pas en colonie", "Qui sont tristes", "Qui vivent loin des villes", "Qui ne volent pas"]),
+  sq("Que fait le troisième paragraphe ?", ["Il présente les menaces et ce qu'on peut faire", "Il décrit la fabrication du miel", "Il raconte une anecdote", "Il donne l'avis d'un apiculteur"]),
+  sq("Le mot « Or », au début du 3e paragraphe, introduit…", ["un élément qui s'oppose à ce qui précède", "une conséquence", "un exemple", "une conclusion"]),
+  sq("De quel type de texte s'agit-il ?", ["Un texte informatif", "Un récit", "Un poème", "Une recette"]),
+  sq("Vrai ou faux : la plupart des abeilles de Belgique vivent dans des ruches.", VF, 1),
+], { explain: "Le texte informatif transmet des faits, souvent avec une source (ici, la FAO). Les connecteurs comme « or », « pourtant », « donc » organisent les idées." }));
+addS("f-gsm", "francais", "Lecture", quiz(5, `<p>Lis le texte puis réponds aux questions.</p>` + TXT_GSM, [
+  sq("Quelle est la thèse d'Inès ?", ["Interdire le téléphone à l'école est une bonne décision", "Le téléphone doit être autorisé partout", "Les parents doivent confisquer les téléphones", "Les récréations sont trop courtes"]),
+  sq("Combien d'arguments pour sa thèse donne-t-elle dans le 2e paragraphe ?", ["3", "2", "4", "1"]),
+  sq("Quel mot introduit son dernier argument ?", ["Enfin", "D'abord", "Ensuite", "Alors"]),
+  sq("Dans le 3e paragraphe, Inès…", ["présente un contre-argument puis le réfute", "donne un nouvel argument", "raconte une anecdote", "change d'avis"]),
+  sq("De quel type de texte s'agit-il ?", ["Un texte argumentatif", "Un texte narratif", "Un texte informatif", "Un texte descriptif"]),
+], { explain: "Un texte argumentatif défend une thèse avec des arguments (souvent organisés par « d'abord, ensuite, enfin ») et répond parfois à un contre-argument." }));
+addS("f-bus-o", "francais", "Écriture", { type: "open", pts: 3, prompt: `<p>Relis le texte.</p>` + TXT_BUS + `<p><b>Le texte dit que Yasmine « fut presque déçue » quand le bus arriva. Explique pourquoi, en t'appuyant sur deux éléments du texte.</b></p>`, model: `Yasmine est presque déçue parce que l'attente, qu'elle trouvait pénible au départ, est devenue un moment agréable et utile. Un vieil homme lui a parlé en néerlandais (« Goedenavond ») et elle lui a répondu. Le texte dit qu'en quarante minutes elle a appris plus de mots qu'en une semaine de cours : elle aurait aimé continuer.`, criteria: ["explique que l'attente est devenue agréable/utile (1 pt)", "cite ou reformule un premier élément du texte (la rencontre avec le vieil homme qui parle néerlandais) (1 pt)", "cite ou reformule un second élément (elle a appris plus de mots qu'en une semaine de cours) (1 pt)"], explain: "" });
+addS("f-abeilles-o", "francais", "Écriture", { type: "open", pts: 3, prompt: `<p>Relis le texte.</p>` + TXT_ABEILLES + `<p><b>Cite deux gestes proposés dans le texte pour aider les abeilles et explique, avec tes mots, pourquoi ils sont utiles.</b></p>`, model: `Le texte propose de laisser une partie du jardin fleurir librement et d'installer un « hôtel à insectes » (on peut aussi citer : planter des espèces locales). Les fleurs apportent de la nourriture (nectar, pollen) aux abeilles et l'hôtel à insectes leur donne un abri pour nicher, alors que les haies et prairies fleuries disparaissent.`, criteria: ["cite un premier geste du texte (1 pt)", "cite un second geste du texte (1 pt)", "explique avec ses mots l'utilité (nourriture et/ou abri) (1 pt)"], explain: "" });
+addS("f-gsm-o", "francais", "Écriture", { type: "open", pts: 4, prompt: `<p>Relis le texte d'Inès.</p>` + TXT_GSM + `<p><b>Es-tu d'accord avec Inès ? Écris un paragraphe argumenté (8 à 12 lignes) : donne ton avis et justifie-le par deux arguments.</b></p>`, model: `Exemple : Je ne suis pas tout à fait d'accord avec Inès. D'abord, le téléphone peut être un outil pour apprendre : on peut chercher une définition ou utiliser une application de néerlandais. Ensuite, interdire complètement n'apprend pas aux élèves à gérer leur temps d'écran ; il vaudrait mieux fixer des règles, par exemple des téléphones rangés en classe mais autorisés à la récréation. En conclusion, je pense qu'il faut encadrer le téléphone plutôt que l'interdire.`, criteria: ["donne clairement son avis (1 pt)", "développe un premier argument pertinent (1 pt)", "développe un second argument pertinent (1 pt)", "organise le texte avec des connecteurs (d'abord, ensuite, en conclusion…) et une langue correcte (1 pt)"], explain: "" });
+addS("f-red1", "francais", "Écriture", { type: "open", pts: 4, prompt: `<p><b>Raconte, en 12 à 15 lignes, un moment où tu as dû faire preuve de courage.</b></p><p>Ton récit doit être écrit au passé, comporter un court passage de dialogue et une fin qui dit ce que tu as ressenti.</p>`, model: `Un bon récit : une situation de départ (où, quand, qui), un problème, des actions, un dénouement et un sentiment final. Il est écrit au passé (passé simple / imparfait ou passé composé / imparfait), avec un dialogue correctement ponctué (tirets ou guillemets, verbes de parole) et des paragraphes.`, criteria: ["récit cohérent avec une situation de départ, un problème et une fin (1 pt)", "temps du passé employés correctement et de façon cohérente (1 pt)", "présence d'un dialogue correctement ponctué (1 pt)", "expression du ressenti et orthographe globalement correcte (1 pt)"], explain: "" });
+addS("f-red2", "francais", "Écriture", { type: "open", pts: 4, prompt: `<p><b>Écris une lettre de 10 à 15 lignes à la direction de ton école pour proposer une amélioration</b> (cour de récréation, cantine, bibliothèque…).</p><p>Respecte la présentation d'une lettre et donne au moins deux arguments.</p>`, model: `Une lettre formelle : lieu et date, formule d'appel (« Madame la Directrice, »), présentation de soi et de la demande, deux arguments développés, formule de politesse (« Je vous prie d'agréer… »), signature. Registre soutenu (vouvoiement).`, criteria: ["présentation de la lettre respectée (date, formule d'appel, formule de politesse, signature) (1 pt)", "demande claire (1 pt)", "au moins deux arguments développés (1 pt)", "registre poli adapté (vouvoiement) et orthographe globalement correcte (1 pt)"], explain: "" });
+// Orthographe : homophones
+const HOMO = [
+  ["Elle ___ perdu ses clés.", ["a", "à"], 0], ["Nous allons ___ la piscine.", ["a", "à"], 1],
+  ["Le chien ___ le chat dorment ensemble.", ["et", "est"], 0], ["Mon frère ___ malade depuis lundi.", ["et", "est"], 1],
+  ["Mes cousins ___ arrivés hier soir.", ["son", "sont"], 1], ["Il a rangé ___ vélo dans le garage.", ["son", "sont"], 0],
+  ["___ chaussures-là sont neuves.", ["Ces", "Ses", "C'est", "S'est"], 0], ["Il ___ blessé en tombant.", ["s'est", "c'est", "ses", "ces"], 0],
+  ["Léa range ___ livres dans son sac.", ["ses", "ces", "c'est", "s'est"], 0], ["___ vraiment une belle journée !", ["C'est", "S'est", "Ses", "Ces"], 0],
+  ["Veux-tu du thé ___ du café ?", ["ou", "où"], 0], ["La ville ___ j'habite est calme.", ["ou", "où"], 1],
+  ["Ils ___ gagné le match.", ["on", "ont"], 1], ["___ partira demain matin.", ["On", "Ont"], 0],
+  ["J'ai rendu à mes voisins ___ cahiers.", ["leur", "leurs"], 1], ["Je ___ ai prêté mon stylo (à eux).", ["leur", "leurs"], 0],
+  ["___ belle surprise !", ["Quelle", "Qu'elle", "Quel"], 0], ["Je pense ___ viendra demain.", ["qu'elle", "quelle", "quel"], 0],
+  ["Il ___ lave les mains.", ["se", "ce"], 0], ["___ film est passionnant.", ["Ce", "Se"], 0],
+  ["Il ___ venir demain.", ["peut", "peu"], 0], ["Il a mangé ___ de légumes.", ["peu", "peut"], 0],
+  ["Les enfants ___ sages aujourd'hui.", ["sont", "son"], 0], ["Il a appris ___ nager cet été.", ["à", "a"], 0],
+];
+addG("francais", "Orthographe", () => quiz(2.5, `<p>Choisis l'homophone correct pour compléter chaque phrase.</p>`, shuffle(HOMO).slice(0, 5).map(([s, o, a]) => sq(s, o, a)), { keepOpts: true, explain: "Astuce : remplace par un autre mot. a → avait ; et → et puis ; est → était ; son → mon ; sont → étaient ; on → il ; ont → avaient ; ou → ou bien." }));
+const ACC = [
+  ["Les lettres que j'ai ___ sont sur la table. (écrire)", ["écrites", "écrit", "écrits", "écrite"], "Avec avoir, le participe s'accorde avec le COD placé avant : « que » = les lettres (féminin pluriel)."],
+  ["Elles sont ___ au cinéma. (aller)", ["allées", "allé", "allés", "allée"], "Avec être, le participe s'accorde avec le sujet « elles »."],
+  ["Nous avons ___ nos devoirs. (finir)", ["fini", "finis", "finie", "finies"], "Avec avoir, pas d'accord avec le sujet ; le COD « nos devoirs » est placé après."],
+  ["La tarte que ma grand-mère a ___ était délicieuse. (préparer)", ["préparée", "préparé", "préparés", "préparées"], "COD « que » (= la tarte) placé avant le verbe : accord au féminin singulier."],
+  ["Mes amis sont ___ en retard. (arriver)", ["arrivés", "arrivé", "arrivée", "arrivées"], "Avec être : accord avec le sujet « mes amis »."],
+  ["Ils ont ___ une pizza. (manger)", ["mangé", "mangés", "mangée", "mangées"], "Avec avoir et COD après le verbe : pas d'accord."],
+  ["Ces chansons, je les ai ___ cent fois. (entendre)", ["entendues", "entendu", "entendus", "entendue"], "COD « les » (= ces chansons) placé avant : accord au féminin pluriel."],
+  ["La porte est ___. (fermer)", ["fermée", "fermé", "fermés", "fermées"], "Participe employé avec être : accord avec « la porte »."],
+  ["Elle porte des chemises ___. (bleu)", ["bleues", "bleu", "bleus", "bleue"], "L'adjectif de couleur simple s'accorde avec le nom."],
+  ["Il a acheté des baskets ___. (orange)", ["orange", "oranges"], "Couleur issue d'un nom (une orange) : invariable. Exceptions : rose, mauve, pourpre, fauve."],
+  ["Les filles se sont ___ tôt. (lever)", ["levées", "levé", "levés", "levée"], "Verbe pronominal : ici, accord avec le sujet « les filles »."],
+];
+addG("francais", "Orthographe", () => { const it = shuffle(ACC).slice(0, 4); return quiz(2, `<p>Choisis la forme correctement accordée.</p>`, it.map(([s, o]) => sq(s, o, 0)), { explain: it.map(x => `« ${x[0].split(" (")[0].replace("___", `<b>${x[1][0]}</b>`)} » : ${x[2]}`).join("<br>") }); });
+// Conjugaison
+const PRON = ["je", "tu", "il", "nous", "vous", "ils"];
+const ENDI = ["ais", "ais", "ait", "ions", "iez", "aient"], ENDF = ["ai", "as", "a", "ons", "ez", "ont"];
+const AUXA = ["ai", "as", "a", "avons", "avez", "ont"], AUXE = ["suis", "es", "est", "sommes", "êtes", "sont"];
+const VERBS = {
+  "être": { pr: ["suis", "es", "est", "sommes", "êtes", "sont"], imp: "ét", fut: "ser", pp: "été", sub: ["sois", "sois", "soit", "soyons", "soyez", "soient"] },
+  "avoir": { pr: ["ai", "as", "a", "avons", "avez", "ont"], imp: "av", fut: "aur", pp: "eu", sub: ["aie", "aies", "ait", "ayons", "ayez", "aient"] },
+  "aller": { pr: ["vais", "vas", "va", "allons", "allez", "vont"], imp: "all", fut: "ir", pp: "allé", etre: true, sub: ["aille", "ailles", "aille", "allions", "alliez", "aillent"] },
+  "faire": { pr: ["fais", "fais", "fait", "faisons", "faites", "font"], imp: "fais", fut: "fer", pp: "fait", sub: ["fasse", "fasses", "fasse", "fassions", "fassiez", "fassent"] },
+  "prendre": { pr: ["prends", "prends", "prend", "prenons", "prenez", "prennent"], imp: "pren", fut: "prendr", pp: "pris", sub: ["prenne", "prennes", "prenne", "prenions", "preniez", "prennent"] },
+  "venir": { pr: ["viens", "viens", "vient", "venons", "venez", "viennent"], imp: "ven", fut: "viendr", pp: "venu", etre: true, sub: ["vienne", "viennes", "vienne", "venions", "veniez", "viennent"] },
+  "pouvoir": { pr: ["peux", "peux", "peut", "pouvons", "pouvez", "peuvent"], imp: "pouv", fut: "pourr", pp: "pu", sub: ["puisse", "puisses", "puisse", "puissions", "puissiez", "puissent"] },
+  "voir": { pr: ["vois", "vois", "voit", "voyons", "voyez", "voient"], imp: "voy", fut: "verr", pp: "vu", sub: ["voie", "voies", "voie", "voyions", "voyiez", "voient"] },
+  "finir": { pr: ["finis", "finis", "finit", "finissons", "finissez", "finissent"], imp: "finiss", fut: "finir", pp: "fini", sub: ["finisse", "finisses", "finisse", "finissions", "finissiez", "finissent"] },
+  "manger": { pr: ["mange", "manges", "mange", "mangeons", "mangez", "mangent"], impL: ["mangeais", "mangeais", "mangeait", "mangions", "mangiez", "mangeaient"], fut: "manger", pp: "mangé", sub: ["mange", "manges", "mange", "mangions", "mangiez", "mangent"] },
+  "dire": { pr: ["dis", "dis", "dit", "disons", "dites", "disent"], imp: "dis", fut: "dir", pp: "dit", sub: ["dise", "dises", "dise", "disions", "disiez", "disent"] },
+  "devoir": { pr: ["dois", "dois", "doit", "devons", "devez", "doivent"], imp: "dev", fut: "devr", pp: "dû", sub: ["doive", "doives", "doive", "devions", "deviez", "doivent"] },
+  "appeler": { pr: ["appelle", "appelles", "appelle", "appelons", "appelez", "appellent"], imp: "appel", fut: "appeller", pp: "appelé", sub: ["appelle", "appelles", "appelle", "appelions", "appeliez", "appellent"] },
+};
+const TENSES = { pr: "présent", imp: "imparfait", fut: "futur simple", pc: "passé composé", cond: "conditionnel présent", sub: "subjonctif présent" };
+function conj(v, t, p) {
+  const V = VERBS[v];
+  if (t === "pr") return [V.pr[p]];
+  if (t === "imp") return [V.impL ? V.impL[p] : V.imp + ENDI[p]];
+  if (t === "fut") return [V.fut + ENDF[p]];
+  if (t === "cond") return [V.fut + ENDI[p]];
+  if (t === "sub") return [V.sub[p]];
+  if (t === "pc") {
+    if (!V.etre) return [AUXA[p] + " " + V.pp];
+    const a = AUXE[p] + " ", pp = V.pp;
+    return [[a + pp, a + pp + "e"], [a + pp, a + pp + "e"], [a + pp], [a + pp + "s", a + pp + "es"], [a + pp + "s", a + pp + "es", a + pp, a + pp + "e"], [a + pp + "s"]][p];
+  }
+}
+function pronFor(p, form, t) {
+  const vow = /^[aeéêiouyh]/i.test(form);
+  let s = p === 0 && vow ? "j'" : PRON[p] + " ";
+  if (t === "sub") s = (p === 2 || p === 5 ? "qu'" : "que ") + s;
+  return s.trim();
+}
+addG("francais", "Conjugaison", () => {
+  const used = new Set(); const fields = [];
+  while (fields.length < 4) {
+    const v = pick(Object.keys(VERBS)), t = pick(Object.keys(TENSES)), p = ri(0, 5), k = v + t;
+    if (used.has(k)) continue; used.add(k);
+    const forms = conj(v, t, p);
+    fields.push({ label: `<span class="conjv">${v}</span> · ${TENSES[t]} · <b>${pronFor(p, forms[0], t)}</b>`, kind: "word", accept: forms, show: `${pronFor(p, forms[0], t)} ${forms[0]}`.replace("' ", "'"), wide: true });
+  }
+  return { type: "num", pts: 2, prompt: `<p>Conjugue chaque verbe au temps demandé. <b>Écris seulement le verbe</b> (sans le pronom), avec les accents.</p>`, fields, explain: `Rappels : imparfait → -ais, -ais, -ait, -ions, -iez, -aient. Futur → infinitif (ou radical) + -ai, -as, -a, -ons, -ez, -ont. Conditionnel → radical du futur + terminaisons de l'imparfait. Passé composé avec « être » (aller, venir…) → accord avec le sujet.` };
+});
+// Grammaire
+const NATURES = ["nom", "verbe", "adjectif", "adverbe", "déterminant", "pronom", "préposition", "conjonction"];
+const NAT = [
+  ["Le chat dort <b>paisiblement</b> sur le canapé.", "adverbe"], ["Elle <b>leur</b> parle chaque jour.", "pronom"], ["Nous avons visité <b>leur</b> maison.", "déterminant"],
+  ["Je reste chez moi <b>car</b> il pleut.", "conjonction"], ["Il marche <b>vers</b> la gare.", "préposition"], ["Cette <b>vieille</b> maison me plaît.", "adjectif"],
+  ["Le <b>courage</b> de Tom impressionne.", "nom"], ["Ils <b>courent</b> dans le parc.", "verbe"], ["<b>Chaque</b> élève a reçu un livre.", "déterminant"],
+  ["<b>Personne</b> n'est venu.", "pronom"], ["Le <b>rouge</b> te va bien.", "nom"], ["Elle est <b>très</b> gentille.", "adverbe"],
+  ["Je sais <b>que</b> tu as raison.", "conjonction"], ["Il parle <b>fort</b>.", "adverbe"], ["Nous partirons <b>après</b> le repas.", "préposition"],
+];
+addG("francais", "Grammaire", () => quiz(2, `<p>Quelle est la <b>classe (nature)</b> du mot en gras ?</p>`, shuffle(NAT).slice(0, 4).map(([s, a]) => { const o = [a, ...shuffle(NATURES.filter(n => n !== a)).slice(0, 3)]; return sq(s, o, 0); }), { explain: "Un même mot peut changer de classe : « leur » est pronom devant un verbe (je leur parle) et déterminant devant un nom (leur maison)." }));
+const FONCTIONS = ["sujet", "COD", "COI", "attribut du sujet", "complément de phrase", "complément du nom"];
+const FON = [
+  ["<b>Les élèves</b> préparent le CE1D.", "sujet"], ["Les élèves préparent <b>le CE1D</b>.", "COD"], ["Je téléphone <b>à ma grand-mère</b>.", "COI"],
+  ["Mon frère semble <b>fatigué</b>.", "attribut du sujet"], ["<b>Chaque matin</b>, je prends le bus.", "complément de phrase"], ["La maison <b>de mes voisins</b> est rouge.", "complément du nom"],
+  ["Elle deviendra <b>médecin</b>.", "attribut du sujet"], ["Il parle souvent <b>de ses vacances</b>.", "COI"], ["<b>Dans la cour</b>, les enfants jouent.", "complément de phrase"],
+  ["Tu as vu <b>ce film</b> ?", "COD"], ["Dans le jardin poussent <b>des tulipes</b>.", "sujet"], ["Je <b>la</b> vois tous les jours.", "COD"],
+];
+addG("francais", "Grammaire", () => quiz(2, `<p>Quelle est la <b>fonction</b> du groupe en gras ?</p>`, shuffle(FON).slice(0, 4).map(([s, a]) => { const o = [a, ...shuffle(FONCTIONS.filter(n => n !== a)).slice(0, 3)]; return sq(s, o, 0); }), { explain: "Sujet : « qui est-ce qui ? » + verbe. COD : verbe + « qui ? / quoi ? ». COI : verbe + « à qui ? / de quoi ? ». Attribut : après un verbe d'état (être, sembler, devenir…). Complément de phrase : déplaçable et supprimable." }));
+const VOC = [
+  sq("Un synonyme de « craindre » :", ["redouter", "espérer", "oublier", "affronter"]), sq("Le contraire de « généreux » :", ["avare", "gentil", "riche", "timide"]),
+  sq("Dans « invisible », le préfixe « in- » signifie :", ["le contraire (ne… pas)", "à l'intérieur", "encore une fois", "avant"]), sq("« Il pleut des cordes » signifie :", ["il pleut très fort", "il pleut un peu", "il va pleuvoir", "il a plu hier"]),
+  sq("« Ce film est captivant » : captivant signifie…", ["passionnant", "ennuyeux", "effrayant", "très court"]), sq("Quel mot appartient à la même famille que « terre » ?", ["atterrir", "terreur", "tordre", "thé"]),
+  sq("« Éphémère » signifie :", ["qui dure peu de temps", "très ancien", "immense", "inutile"]), sq("Dans « lavable », le suffixe « -able » signifie :", ["qui peut être (lavé)", "qui a été lavé", "qui lave souvent", "qui n'est pas lavé"]),
+  sq("Un antonyme de « augmenter » :", ["diminuer", "accroître", "multiplier", "ajouter"]), sq("Quel mot est un homophone de « verre » ?", ["vert", "vitre", "tasse", "venir"]),
+  sq("« Avoir le cafard » signifie :", ["être triste", "avoir peur des insectes", "être malade", "avoir faim"]), sq("« Il a fait une brillante carrière » : « brillante » est employé…", ["au sens figuré", "au sens propre", "au sens technique", "de façon ironique"]),
+];
+addG("francais", "Vocabulaire", () => quiz(2, `<p>Réponds aux questions de vocabulaire.</p>`, shuffle(VOC).slice(0, 4), { explain: "Pour deviner le sens d'un mot, observe son préfixe, son suffixe, sa famille et le contexte de la phrase." }));
+
+/* ============ NÉERLANDAIS ============ */
+const NLVOC = [["de school", "l'école"], ["het boek", "le livre"], ["de leraar", "le professeur"], ["het huiswerk", "les devoirs"], ["de klas", "la classe"], ["de moeder", "la mère"], ["de broer", "le frère"], ["de zus", "la sœur"], ["de oom", "l'oncle"], ["het brood", "le pain"], ["de kaas", "le fromage"], ["de melk", "le lait"], ["het ei", "l'œuf"], ["de appel", "la pomme"], ["het vlees", "la viande"], ["woensdag", "mercredi"], ["vrijdag", "vendredi"], ["zondag", "dimanche"], ["vandaag", "aujourd'hui"], ["morgen", "demain"], ["gisteren", "hier"], ["zwemmen", "nager"], ["lezen", "lire"], ["fietsen", "faire du vélo"], ["tekenen", "dessiner"], ["koken", "cuisiner"], ["de keuken", "la cuisine"], ["de slaapkamer", "la chambre"], ["de tuin", "le jardin"], ["het raam", "la fenêtre"], ["de deur", "la porte"], ["groot", "grand"], ["klein", "petit"], ["mooi", "beau"], ["moe", "fatigué"], ["blij", "content"], ["duur", "cher"], ["goedkoop", "bon marché"], ["ziek", "malade"], ["koud", "froid"], ["warm", "chaud"], ["het regent", "il pleut"], ["de trein", "le train"], ["het station", "la gare"], ["de winkel", "le magasin"], ["de verjaardag", "l'anniversaire"], ["het ontbijt", "le petit-déjeuner"], ["de vriend", "l'ami"]];
+addG("neerlandais", "Vocabulaire (NL)", () => { const it = shuffle(NLVOC).slice(0, 6); const extra = shuffle(NLVOC.filter(x => !it.includes(x))).slice(0, 2); return { type: "match", pts: 2, prompt: `<p>Traduis chaque mot néerlandais en français.</p>`, items: it.map(([nl, fr]) => ({ left: `<span lang="nl">${nl}</span>`, answer: fr })), choices: [...it, ...extra].map(x => x[1]), explain: it.map(([nl, fr]) => `${nl} = ${fr}`).join(" · ") }; });
+addG("neerlandais", "Vocabulaire (NL)", () => { const it = shuffle(NLVOC).slice(0, 4); return { type: "num", pts: 2, prompt: `<p>Écris le mot néerlandais (avec « de » ou « het » pour les noms).</p>`, fields: it.map(([nl, fr]) => ({ label: fr + " =", kind: "word", accept: [nl, nl.replace(/^(de|het) /, "")].filter((x, i, a) => a.indexOf(x) === i), strictArticle: /^(de|het) /.test(nl) ? nl : null, show: nl, wide: true })), explain: "Apprends toujours un nom avec son article : de (masculin/féminin) ou het (neutre)." }; });
+const NLG = [
+  sq("Quelle phrase est correcte ?", ["Morgen ga ik naar school.", "Morgen ik ga naar school.", "Ik morgen ga naar school.", "Morgen naar school ik ga."]),
+  sq("___ boek is interessant.", ["Het", "De"]), sq("___ tafel is groot.", ["De", "Het"]),
+  sq("Het meisje ___ twee broers.", ["heeft", "hebt", "hebben", "is"]), sq("Wij ___ in Brussel.", ["wonen", "woont", "woon", "gewoond"]),
+  sq("Jij ___ heel sportief.", ["bent", "ben", "is", "zijn"]), sq("___ woon je? — In Anderlecht.", ["Waar", "Wie", "Wat", "Wanneer"]),
+  sq("___ is je verjaardag? — Op 12 mei.", ["Wanneer", "Waar", "Wie", "Hoe"]), sq("___ heet je? — Ik heet Sara.", ["Hoe", "Wat", "Waar", "Wie"]),
+  sq("Le pluriel de « het boek » :", ["de boeken", "de boeks", "het boeken", "de boekens"]), sq("Le pluriel de « de stoel » :", ["de stoelen", "de stoels", "het stoelen", "de stoeles"]),
+  sq("« Het is half vier » veut dire :", ["3 h 30", "4 h 30", "4 h 15", "3 h 45"]), sq("« Het is kwart over acht » veut dire :", ["8 h 15", "7 h 45", "8 h 45", "8 h 30"]),
+  sq("Ik vind ___ aardig. (lui, un garçon)", ["hem", "hij", "zijn", "haar"]), sq("Dat is de fiets van mijn broer. Het is ___ fiets.", ["zijn", "haar", "hun", "mijn"]),
+  sq("Ik heb gisteren een film ___.", ["gezien", "zien", "zie", "gezeten"]), sq("Ik kan morgen niet komen, want ik ___ ziek.", ["ben", "heb", "is", "zijn"]),
+  sq("« Zevenenveertig », c'est :", ["47", "74", "17", "407"]), sq("« Negenendertig », c'est :", ["39", "93", "29", "49"]),
+  sq("Ik ga ___ de trein naar Gent.", ["met", "in", "op", "bij"]), sq("Quelle phrase est correcte ?", ["Ik weet dat hij morgen komt.", "Ik weet dat hij komt morgen.", "Ik weet dat komt hij morgen.", "Ik weet hij dat morgen komt."]),
+];
+addG("neerlandais", "Grammaire (NL)", () => quiz(2.5, `<p>Choisis la bonne réponse.</p>`, shuffle(NLG).slice(0, 5), { explain: "Deux règles d'or : le verbe conjugué est en 2e position dans la phrase principale (Morgen <b>ga</b> ik…), et il va à la fin après « dat, omdat, als… » (…dat hij morgen <b>komt</b>). Les nombres se lisent à l'envers : zeven-en-veertig = 7 et 40 = 47." }));
+const NL_T1 = textBox("", `Hallo Emma,
+
+Hoe gaat het met jou? Volgende zaterdag word ik veertien jaar! Ik geef een feestje bij mij thuis, in de Kerkstraat 12. Het feest begint om drie uur 's middags en eindigt om acht uur 's avonds. We gaan eerst naar het zwembad en daarna eten we pizza in de tuin. Als het regent, blijven we binnen en kijken we een film.
+
+Kun je een badpak en een handdoek meebrengen? Je hoeft geen cadeau te kopen, maar je mag wel een dessert maken!
+
+Laat je me voor woensdag weten of je komt?
+
+Groetjes,
+Lotte`).replace('class="textdoc"', 'class="textdoc" lang="nl"');
+const NL_T2 = textBox("Sportkamp in de paasvakantie!", `Voor jongeren van 12 tot 15 jaar.
+Van maandag 6 tot vrijdag 10 april, elke dag van 9 uur tot 16 uur.
+
+Activiteiten: klimmen, hockey, zwemmen en een fietstocht in het bos.
+
+Prijs: 120 euro per week (lunch inbegrepen). Broers en zussen krijgen 10 euro korting.
+
+Breng elke dag sportkleren en een drinkfles mee.
+Inschrijven vóór 20 maart aan het onthaal van de sporthal.`).replace('class="textdoc"', 'class="textdoc" lang="nl"');
+const NL_T3 = textBox("", `Mijn naam is Karim. Ik ben dertien jaar en ik woon met mijn ouders en mijn twee zussen in Luik. Mijn vader is verpleger en mijn moeder werkt in een bakkerij. Ik zit in het tweede middelbaar.
+
+Mijn lievelingsvak is wiskunde, maar ik vind Nederlands moeilijk. Daarom kijk ik elke avond een korte serie in het Nederlands met ondertitels.
+
+In mijn vrije tijd speel ik basketbal. Ik train twee keer per week: op dinsdag en op donderdag. Later wil ik dokter worden, net als mijn oom.`).replace('class="textdoc"', 'class="textdoc" lang="nl"');
+addS("n-t1", "neerlandais", "Lire (NL)", quiz(5, `<p>Lis ce message puis réponds en français.</p>` + NL_T1, [
+  sq("Pourquoi Lotte organise-t-elle une fête ?", ["Pour ses 14 ans", "Pour la fin de l'école", "Parce qu'Emma déménage", "Pour Noël"]),
+  sq("À quelle heure commence la fête ?", ["15 h", "13 h", "20 h", "3 h du matin"]),
+  sq("Que feront-ils s'il pleut ?", ["Regarder un film à l'intérieur", "Aller quand même à la piscine", "Annuler la fête", "Manger au restaurant"]),
+  sq("Qu'est-ce qu'Emma doit apporter ?", ["Un maillot de bain et un essuie", "Un cadeau", "Une pizza", "Un film"]),
+  sq("Avant quel jour Emma doit-elle répondre ?", ["Mercredi", "Samedi", "Vendredi", "Dimanche"]),
+], { explain: "Mots clés : word ik veertien = j'aurai quatorze ans ; drie uur 's middags = 15 h ; als het regent = s'il pleut ; badpak = maillot ; handdoek = essuie ; voor woensdag = avant mercredi." }));
+addS("n-t2", "neerlandais", "Lire (NL)", quiz(5, `<p>Lis cette affiche puis réponds en français.</p>` + NL_T2, [
+  sq("Pour qui est ce stage ?", ["Les jeunes de 12 à 15 ans", "Les enfants de 6 à 10 ans", "Les adultes", "Tout le monde"]),
+  sq("Quand a lieu le stage ?", ["Pendant les vacances de printemps (Pâques)", "Pendant les vacances de Noël", "En été", "Au carnaval"]),
+  sq("Quelle activité n'est PAS proposée ?", ["Le tennis", "L'escalade", "Le hockey", "La natation"]),
+  sq("Qu'est-ce qui est compris dans le prix ?", ["Le repas de midi", "Le vélo", "Les vêtements de sport", "Le transport"]),
+  sq("Combien paie un frère ou une sœur d'un participant ?", ["110 €", "120 €", "130 €", "100 €"]),
+], { explain: "paasvakantie = vacances de Pâques ; klimmen = escalader ; lunch inbegrepen = repas de midi compris ; korting = réduction (120 − 10 = 110 €)." }));
+addS("n-t3", "neerlandais", "Lire (NL)", quiz(6, `<p>Lis ce texte puis réponds en français.</p>` + NL_T3, [
+  sq("Combien de personnes vivent chez Karim (lui compris) ?", ["5", "4", "3", "6"]),
+  sq("Quel est le métier de sa mère ?", ["Elle travaille dans une boulangerie", "Elle est infirmière", "Elle est médecin", "Elle est professeure"]),
+  sq("Quelle matière trouve-t-il difficile ?", ["Le néerlandais", "Les maths", "Le sport", "L'histoire"]),
+  sq("Que fait-il pour progresser ?", ["Il regarde une série en néerlandais sous-titrée chaque soir", "Il prend des cours particuliers", "Il lit des livres en néerlandais", "Il part en vacances en Flandre"]),
+  sq("Quand s'entraîne-t-il au basket ?", ["Le mardi et le jeudi", "Le lundi et le mercredi", "Tous les jours", "Le week-end"]),
+  sq("Vrai ou faux : Karim veut devenir infirmier comme son père.", VF, 1),
+], { explain: "Ouders (2) + twee zussen (2) + Karim = 5. Verpleger = infirmier (le père). Karim veut devenir dokter (médecin), comme son oncle." }));
+const AUD = [
+  { id: "n-a1", t: "Attentie, alstublieft. De trein naar Antwerpen-Centraal van tien uur vijftien vertrekt vandaag niet van spoor drie, maar van spoor zeven. De trein heeft ongeveer tien minuten vertraging. Wij danken u voor uw begrip.", c: "Une annonce dans une gare.", s: [sq("Quelle est la destination du train ?", ["Anvers", "Gand", "Bruxelles", "Liège"]), sq("De quel quai part le train aujourd'hui ?", ["Quai 7", "Quai 3", "Quai 10", "Quai 15"]), sq("Quel est le retard du train ?", ["Environ 10 minutes", "Environ 15 minutes", "Environ 3 minutes", "Il n'a pas de retard"])] },
+  { id: "n-a2", t: "Goedemiddag, kan ik u helpen? ... Ja, ik zoek een blauwe trui voor mijn broer. ... Welke maat? ... Medium, denk ik. ... Deze trui kost vijfendertig euro. ... Oei, dat is een beetje duur. Hebt u iets goedkopers? ... Ja, deze grijze trui is in solden. Hij kost twintig euro. ... Perfect, die neem ik.", c: "Une conversation dans un magasin de vêtements.", s: [sq("Que cherche la cliente ?", ["Un pull pour son frère", "Un pantalon", "Un pull pour elle", "Une veste"]), sq("Combien coûte le pull bleu ?", ["35 €", "25 €", "53 €", "20 €"]), sq("Qu'achète-t-elle finalement ?", ["Le pull gris à 20 €", "Le pull bleu", "Rien", "Deux pulls"])] },
+  { id: "n-a3", t: "Hoi Sam, met Noor. Morgen gaan we niet om twee uur naar de bioscoop, want mijn moeder heeft de auto nodig. We gaan om half vijf. Ik kom je halen met de fiets. Vergeet je geld niet: een ticket kost negen euro. Tot morgen!", c: "Un message vocal.", s: [sq("Pourquoi l'heure du cinéma change-t-elle ?", ["La mère de Noor a besoin de la voiture", "Le film est annulé", "Noor est malade", "Le cinéma est fermé"]), sq("À quelle heure iront-ils au cinéma ?", ["16 h 30", "14 h", "17 h 30", "15 h 30"]), sq("Comment Noor viendra-t-elle chercher Sam ?", ["À vélo", "En voiture", "En bus", "À pied"]), sq("Combien coûte un ticket ?", ["9 €", "19 €", "90 €", "5 €"])] },
+  { id: "n-a4", t: "Het weerbericht voor morgen. In de voormiddag is het bewolkt met hier en daar een bui. In de namiddag komt de zon erdoor. De temperaturen liggen tussen twaalf en zestien graden. Zondag wordt het kouder en regent het de hele dag.", c: "La météo à la radio.", s: [sq("Quel temps fera-t-il demain matin ?", ["Nuageux avec quelques averses", "Ensoleillé", "De la neige", "De l'orage"]), sq("Quelles seront les températures ?", ["Entre 12 et 16 degrés", "Entre 20 et 26 degrés", "Entre 2 et 6 degrés", "Entre 16 et 20 degrés"]), sq("Et dimanche ?", ["Plus froid, pluie toute la journée", "Plus chaud et ensoleillé", "Du soleil toute la journée", "De la neige"])] },
+  { id: "n-a5", t: "Welkom in het museum. Het museum is open van dinsdag tot zondag, van tien tot vijf uur. Op maandag is het museum gesloten. Een ticket kost acht euro, voor studenten vijf euro. Rugzakken moet u in de lockers achterlaten. Foto's maken is toegestaan, maar zonder flits.", c: "Un message d'accueil dans un musée.", s: [sq("Quel jour le musée est-il fermé ?", ["Le lundi", "Le dimanche", "Le mardi", "Le samedi"]), sq("Combien paie un étudiant ?", ["5 €", "8 €", "10 €", "Rien"]), sq("Que faut-il faire avec son sac à dos ?", ["Le laisser dans un casier", "Le garder sur soi", "Le montrer à l'entrée", "Le laisser dans la voiture"]), sq("Les photos sont…", ["autorisées, mais sans flash", "interdites", "autorisées avec flash", "payantes"])] },
+];
+AUD.forEach(a => addS(a.id, "neerlandais", "Écouter (NL)", quiz(a.s.length, `<p>${a.c} Écoute le document (2 écoutes maximum, comme au CE1D), puis réponds en français.</p>`, a.s, { audio: { text: a.t, lang: "nl-BE" }, explain: "" })));
+const NLW = [
+  { p: `<p><b>Tu invites un(e) ami(e) néerlandophone à ton anniversaire.</b> Écris-lui un message <b>en néerlandais</b> (40 à 60 mots). Indique : le jour et l'heure, l'endroit, ce que vous allez faire et ce qu'il/elle doit apporter.</p>`, m: `Hallo Lars,\nVolgende zaterdag word ik veertien jaar. Ik geef een feestje bij mij thuis in de Stationsstraat 8. Het feest begint om twee uur. We gaan eerst bowlen en daarna eten we frietjes. Kun je muziek meebrengen? Laat je me weten of je komt?\nGroetjes,\nSara`, c: ["les 4 informations demandées sont présentes (jour/heure, lieu, activité, objet à apporter) (1 pt)", "phrases compréhensibles avec le verbe conjugué à la bonne place (1 pt)", "salutation et formule finale adaptées, vocabulaire correct, longueur respectée (1 pt)"] },
+  { p: `<p><b>Présente-toi en néerlandais</b> (40 à 60 mots) : ton nom, ton âge, où tu habites, ta famille, tes loisirs et ce que tu aimes à l'école.</p>`, m: `Hallo! Ik heet Sara en ik ben dertien jaar. Ik woon in Anderlecht met mijn moeder, mijn vader en mijn broer. In mijn vrije tijd teken ik graag en ik speel volleybal. Op school vind ik wetenschappen leuk, maar wiskunde vind ik moeilijk.`, c: ["les informations demandées sont présentes (nom, âge, domicile, famille, loisirs, école) (1 pt)", "phrases compréhensibles, verbes correctement conjugués (ik ben, ik woon…) (1 pt)", "vocabulaire adapté et longueur respectée (1 pt)"] },
+  { p: `<p><b>Écris un petit e-mail en néerlandais</b> (40 à 60 mots) à ton correspondant pour lui raconter ton dernier week-end : où tu étais, avec qui, ce que tu as fait et si c'était bien.</p>`, m: `Hoi Tom,\nVorig weekend ben ik naar Gent gegaan met mijn familie. Op zaterdag hebben we de stad bezocht en we hebben wafels gegeten. Op zondag heb ik voetbal gespeeld met mijn neef. Het was heel leuk!\nTot snel,\nSara`, c: ["les informations demandées sont présentes (où, avec qui, activités, avis) (1 pt)", "le passé (voltooid verleden tijd : ik heb … gespeeld / ik ben … gegaan) est utilisé, même avec quelques erreurs (1 pt)", "formules d'ouverture et de fin, phrases compréhensibles, longueur respectée (1 pt)"] },
+];
+NLW.forEach((w, i) => addS("n-w" + i, "neerlandais", "Écrire (NL)", { type: "open", pts: 3, prompt: w.p, model: w.m, criteria: w.c, explain: "" }));
+
 /* ============ composition d'un examen ============ */
 const QUOTAS = {
   // répartition calquée sur la circulaire CE1D 2025-2026 : Nombres 40 %, Géométrie 30 %, Grandeurs 15 %, Traitement de données 15 %
   maths: { "Nombres": 3, "Algèbre": 4, "Géométrie": 5, "Grandeurs": 3, "Traitement de données": 3, "Justifier": 2 },
   sciences: { "Matière": 4, "Vivant": 3, "Organisme humain": 3, "Énergie": 2, "Air, eau et sol": 2, "L'homme et l'environnement": 2, "Démarche scientifique": 1, "Justifier": 2 },
+  francais: { "Lecture": 2, "Orthographe": 2, "Conjugaison": 2, "Grammaire": 2, "Vocabulaire": 1, "Écriture": 2 },
+  neerlandais: { "Écouter (NL)": 3, "Lire (NL)": 2, "Vocabulaire (NL)": 2, "Grammaire (NL)": 1, "Écrire (NL)": 1 },
 };
 const store = {
   get(k, d) { try { const v = localStorage.getItem("ce1d:" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
@@ -733,13 +1047,17 @@ function prepare(q, subject, theme, id) {
   if (q.type === "qcm") { const order = shuffle(q.options.map((_, i) => i)); q.options = order.map(i => q.options[i]); q.answer = order.indexOf(q.answer); }
   if (q.type === "multi") { const order = shuffle(q.options.map((_, i) => i)); q.options = order.map(i => q.options[i]); q.answers = q.answers.map(a => order.indexOf(a)); }
   if (q.type === "match") { q.items = shuffle(q.items); q.choices = [...new Set(q.choices)]; if (q.choices.length > 3 && !q.choices.every(c => /^\d+$/.test(c))) q.choices = shuffle(q.choices); }
+  if (q.type === "quiz") q.subs = q.subs.map(u => {
+    if (q.keepOpts || u.options.length <= 2) return u;
+    const order = shuffle(u.options.map((_, i) => i)); return { q: u.q, options: order.map(i => u.options[i]), answer: order.indexOf(u.answer) };
+  });
   if (q.type === "order") { let o; do o = shuffle(q.items.map((_, i) => i)); while (o.every((v, i) => v === i)); q.start = o; }
   return q;
 }
 function buildExam(subject, length) {
   const seen = new Set(store.get("seen", []));
-  const subs = subject === "mixte" ? ["maths", "sciences"] : [subject];
-  const factor = (subject === "mixte" ? 0.5 : 1) * (length === "court" ? 0.5 : 1);
+  const subs = subject === "tout" ? ["maths", "sciences", "francais", "neerlandais"] : subject === "mixte" ? ["maths", "sciences"] : [subject];
+  const factor = (subject === "tout" ? 0.35 : subject === "mixte" ? 0.5 : 1) * (length === "court" ? 0.5 : 1);
   const qs = [];
   subs.forEach(sb => {
     Object.entries(QUOTAS[sb]).forEach(([theme, n]) => {
@@ -751,7 +1069,9 @@ function buildExam(subject, length) {
       const pool = []; const A = gens.slice(), B = fresh.map(s => ({ kind: "s", s })), C = old.map(s => ({ kind: "s", s }));
       while (A.length || B.length) { if (A.length) pool.push(A.shift()); if (B.length) pool.push(B.shift()); }
       pool.push(...C);
-      pool.slice(0, k).forEach(p => {
+      const chosen = pool.slice(0, k); let gi = 0;
+      while (chosen.length < k && gens.length) chosen.push(gens[gi++ % gens.length]);
+      chosen.forEach(p => {
         if (p.kind === "g") qs.push(prepare(p.g.make(), sb, theme, gid("g")));
         else { qs.push(prepare(p.s.q, sb, theme, p.s.id)); seen.add(p.s.id); }
       });
@@ -760,8 +1080,8 @@ function buildExam(subject, length) {
   const all = S.map(s => s.id); let arr = [...seen]; if (arr.length > all.length * 0.8) arr = arr.slice(-Math.floor(all.length * 0.4));
   store.set("seen", arr);
   // ouvertes à la fin de chaque partie, comme dans le vrai carnet
-  const ordered = []; subs.forEach(sb => { const part = qs.filter(q => q.subject === sb); ordered.push(...shuffle(part.filter(q => q.type !== "open")), ...part.filter(q => q.type === "open")); });
-  return { id: gid("ex"), subject, length, started: Date.now(), questions: ordered, answers: {}, idx: 0, finished: null, grading: {} };
+  const ordered = []; subs.forEach(sb => { const part = qs.filter(q => q.subject === sb); ordered.push(...shuffle(part.filter(q => q.type !== "open" && q.audio)), ...shuffle(part.filter(q => q.type !== "open" && !q.audio)), ...part.filter(q => q.type === "open")); });
+  return { id: gid("ex"), subject, length, started: Date.now(), questions: ordered, answers: {}, idx: 0, finished: null, grading: {}, plays: {} };
 }
 
 /* ============ correction ============ */
@@ -774,6 +1094,7 @@ function isAnswered(q, v) {
   if (q.type === "match") return v.some(x => x);
   if (q.type === "order") return !!v.touched;
   if (q.type === "open") return String(v).trim().length > 0;
+  if (q.type === "quiz") return Array.isArray(v) && v.some(x => x != null);
   return false;
 }
 function gradeAuto(q, v) {
@@ -782,6 +1103,7 @@ function gradeAuto(q, v) {
   if (q.type === "multi") { const sel = v || []; const good = sel.filter(i => q.answers.includes(i)).length, bad = sel.length - good; return { pts: half(Math.max(0, (good - bad) / q.answers.length) * P) }; }
   if (q.type === "num") { const oks = q.fields.map((f, i) => checkField(f, (v || [])[i])); return { pts: half(oks.filter(Boolean).length / oks.length * P), oks }; }
   if (q.type === "match") { const oks = q.items.map((it, i) => (v || [])[i] === it.answer); return { pts: half(oks.filter(Boolean).length / oks.length * P), oks }; }
+  if (q.type === "quiz") { const oks = q.subs.map((u, i) => (v || [])[i] === u.answer); return { pts: half(oks.filter(Boolean).length / oks.length * P), oks }; }
   if (q.type === "order") { const ord = (v && v.order) || q.start; const oks = ord.map((x, i) => x === i); const all = oks.every(Boolean); return { pts: all ? P : half(oks.filter(Boolean).length / oks.length * P * 0.6), oks }; }
   return { pts: 0 };
 }
@@ -814,9 +1136,10 @@ async function gradeOpen(ex) {
   if (!sampleFn) { todo.forEach(q => ex.grading[q.id] = { mode: "self" }); save(); render(); return; }
   const tmp = document.createElement("div");
   const list = todo.map(q => { tmp.innerHTML = q.prompt; return { id: q.id, max: q.pts, question: tmp.textContent.trim(), reponse_modele: q.model, criteres: q.criteria, reponse_eleve: String(ex.answers[q.id]).slice(0, 3000) }; });
-  const prompt = `Tu es correcteur de l'épreuve externe CE1D (Belgique, Fédération Wallonie-Bruxelles, fin de 2e secondaire). Corrige les réponses rédigées d'une élève de 13-14 ans.
+  const prompt = `Tu es correcteur de l'épreuve externe CE1D (Belgique, Fédération Wallonie-Bruxelles, fin de 2e secondaire : mathématiques, sciences, français ou néerlandais langue moderne). Corrige les réponses rédigées d'une élève de 13-14 ans.
 Règles :
-- Pour chaque question, attribue des points de 0 au maximum ("max"), par pas de 0,5, en suivant les critères. Accepte toute formulation correcte, même différente du modèle. Ne pénalise pas l'orthographe.
+- Pour chaque question, attribue des points de 0 au maximum ("max"), par pas de 0,5, en suivant les critères. Accepte toute formulation correcte, même différente du modèle. Ne pénalise l'orthographe que si un critère la mentionne.
+- Pour une production en néerlandais, juge selon le niveau débutant (A1-A2) attendu en 2e secondaire : la compréhensibilité compte plus que la perfection.
 - Sois juste et exigeant comme au vrai CE1D : une réponse sans justification ne reçoit pas les points de justification.
 - "feedback" : 1 à 3 phrases en français, adressées à l'élève (tutoiement), qui disent ce qui est juste et précisément ce qui manque.
 - Si la réponse est hors sujet ou vide de sens, 0 point.
@@ -847,7 +1170,7 @@ function updateHistory(e) {
   const t = totals(e); const h = store.get("history", []); const rec = { id: e.id, subject: e.subject, length: e.length, date: e.finished, got: t.got, max: t.max, th: t.th, time: e.finished - e.started };
   const i = h.findIndex(x => x.id === e.id); if (i >= 0) h[i] = rec; else h.unshift(rec); store.set("history", h.slice(0, 30));
 }
-const subjName = s => ({ maths: "Mathématiques", sciences: "Sciences", mixte: "Maths + sciences" }[s]);
+const subjName = s => ({ maths: "Mathématiques", sciences: "Sciences", francais: "Français", neerlandais: "Néerlandais", tout: "Les 4 matières", mixte: "Maths + sciences" }[s] || s);
 const mmss = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); };
 const dateFr = t => new Date(t).toLocaleDateString("fr-BE", { day: "numeric", month: "short" }) + " · " + new Date(t).toLocaleTimeString("fr-BE", { hour: "2-digit", minute: "2-digit" });
 const on20 = (g, m) => m ? fmt(g / m * 20, 1) : "0";
@@ -877,13 +1200,13 @@ function renderHome() {
   </section>
   <p class="label">1. Choisis la matière</p>
   <div class="subjects" role="group" aria-label="Matière">
-    ${["maths", "sciences", "mixte"].map(s => `<button class="subj" data-s="${s}" aria-pressed="${choice.subject === s}"><b>${subjName(s)}</b><span>${{ maths: "Nombres et algèbre, géométrie, grandeurs, traitement de données", sciences: "Matière, vivant, corps humain, énergie, air-eau-sol, environnement", mixte: "La moitié de chaque carnet" }[s]}</span></button>`).join("")}
+    ${["maths", "sciences", "francais", "neerlandais", "tout"].map(s => `<button class="subj ${s === "tout" ? "all" : ""}" data-s="${s}" aria-pressed="${choice.subject === s}"><b>${subjName(s)}</b><span>${{ maths: "Nombres et algèbre, géométrie, grandeurs, traitement de données", sciences: "Matière, vivant, corps humain, énergie, air-eau-sol, environnement", francais: "Lecture, orthographe, conjugaison, grammaire, vocabulaire, écriture", neerlandais: "Écoute, lecture, vocabulaire, grammaire, écriture", tout: "Un examen blanc complet qui mélange maths, sciences, français et néerlandais (± 1 h 30)" }[s]}</span></button>`).join("")}
   </div>
   <p class="label">2. Choisis la durée</p>
   <div class="startrow">
     <div class="seg" role="group" aria-label="Durée">
-      <button data-l="complet" aria-pressed="${choice.length === "complet"}">Complet · ± 60 min</button>
-      <button data-l="court" aria-pressed="${choice.length === "court"}">Court · ± 25 min</button>
+      <button data-l="complet" aria-pressed="${choice.length === "complet"}">Complet · ± ${choice.subject === "tout" ? "90" : "60"} min</button>
+      <button data-l="court" aria-pressed="${choice.length === "court"}">Court · ± ${choice.subject === "tout" ? "60" : "25"} min</button>
     </div>
     <button class="btn primary" id="start">Commencer l'examen</button>
   </div>
@@ -920,6 +1243,7 @@ function renderExam() {
     </div>
     <div class="prompt" id="prompt">${q.prompt}</div>
     ${q.figure || ""}
+    ${q.audio ? `<div class="audio" id="audio"></div>` : ""}
     <div class="answer" id="answer"></div>
     <div class="nav">
       <button class="btn ghost" id="prev" ${ex.idx === 0 ? "disabled" : ""}>Précédente</button>
@@ -930,6 +1254,7 @@ function renderExam() {
   <nav class="dots" aria-label="Aller à la question">${ex.questions.map((x, i) => `<button class="dot ${isAnswered(x, ex.answers[x.id]) ? "done" : ""} ${i === ex.idx ? "cur" : ""}" data-i="${i}" aria-label="Question ${i + 1}">${i + 1}</button>`).join("")}</nav>
   <div class="nav"><span class="hint">Tes réponses sont gardées sur cet appareil si tu fermes la page.</span><button class="btn small" id="finish2">Remettre ma copie</button></div>`;
   renderAnswer(q);
+  if (q.audio) renderAudio(q);
   const go = i => { ex.idx = i; save(); confirmOpen = false; renderExam(); window.scrollTo({ top: 0 }); };
   $("#prev").onclick = () => go(ex.idx - 1);
   if ($("#next")) $("#next").onclick = () => go(ex.idx + 1);
@@ -938,6 +1263,30 @@ function renderExam() {
   if ($("#finish")) $("#finish").onclick = fin; $("#finish2").onclick = fin;
   if (confirmOpen) showConfirm();
   if (canSpeak) $("#speak").onclick = () => { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance($("#prompt").textContent); u.lang = "fr-BE"; u.rate = .95; speechSynthesis.speak(u); } catch (e) {} };
+}
+function nlVoice() { try { const v = speechSynthesis.getVoices(); return v.find(x => /^nl[-_]BE/i.test(x.lang)) || v.find(x => /^nl/i.test(x.lang)) || null; } catch (e) { return null; } }
+function renderAudio(q) {
+  const box = $("#audio"); if (!box) return;
+  ex.plays = ex.plays || {}; const n = ex.plays[q.id] || 0, left = 2 - n;
+  const can = "speechSynthesis" in window;
+  box.innerHTML = `<button class="btn primary" id="play" ${left <= 0 || !can ? "disabled" : ""}>${ICON.sound} ${n === 0 ? "Écouter le document" : "Réécouter"}</button>
+    <span class="hint">${left > 0 ? `Écoutes restantes : ${left}` : "Tu as utilisé tes 2 écoutes."}</span>
+    <button class="btn small ghost" id="notts">Pas de son ?</button>
+    <div id="transcript" hidden><p class="hint">Ton appareil n'a pas de voix néerlandaise. Lis le document à la place (c'est plus facile qu'au vrai examen) :</p><div class="textdoc" lang="nl"><p>${esc(q.audio.text).replace(/ \.\.\. /g, "<br>")}</p></div></div>`;
+  const play = $("#play");
+  if (play) play.onclick = () => {
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(q.audio.text.replace(/ \.\.\. /g, ". "));
+      const v = nlVoice(); u.lang = v ? v.lang : "nl-BE"; if (v) u.voice = v; u.rate = .9;
+      speechSynthesis.speak(u);
+      ex.plays[q.id] = (ex.plays[q.id] || 0) + 1; save();
+      const t = document.createElement("div"); renderAudio(q);
+    } catch (e) { $("#transcript").hidden = false; }
+  };
+  $("#notts").onclick = () => { $("#transcript").hidden = false; };
+  if (can) { const v = nlVoice(); if (!v && speechSynthesis.getVoices().length) $("#transcript").hidden = false; }
+  else $("#transcript").hidden = false;
 }
 function showConfirm() {
   const miss = ex.questions.map((x, i) => isAnswered(x, ex.answers[x.id]) ? null : i + 1).filter(Boolean);
@@ -962,8 +1311,8 @@ function renderAnswer(q) {
   } else if (q.type === "num") {
     const vals = v || q.fields.map(() => "");
     const hasExpr = q.fields.some(f => f.kind === "expr" || f.kind === "frac");
-    box.innerHTML = q.fields.map((f, i) => `<div class="field"><label for="f-${q.id}-${i}">${f.label}</label><input id="f-${q.id}-${i}" class="${f.wide ? "wide" : ""}" inputmode="${f.kind === "num" ? "decimal" : "text"}" autocomplete="off" spellcheck="false" value="${esc(vals[i])}">${f.suf ? `<span class="suf">${f.suf}</span>` : ""}</div>`).join("")
-      + (hasExpr ? `<p class="hint">Tu peux écrire les fractions avec / (ex. 5/6) et les puissances avec ^ (ex. x^2).</p>` : `<p class="hint">Utilise la virgule pour les nombres décimaux.</p>`);
+    box.innerHTML = q.fields.map((f, i) => `<div class="field"><label for="f-${q.id}-${i}">${f.label}</label><input id="f-${q.id}-${i}" class="${f.wide ? "wide" : ""}" inputmode="${f.kind === "num" ? "decimal" : "text"}" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(vals[i])}">${f.suf ? `<span class="suf">${f.suf}</span>` : ""}</div>`).join("")
+      + (q.fields.some(f => f.kind === "word") ? "" : hasExpr ? `<p class="hint">Tu peux écrire les fractions avec / (ex. 5/6) et les puissances avec ^ (ex. x^2).</p>` : `<p class="hint">Utilise la virgule pour les nombres décimaux.</p>`);
     box.querySelectorAll("input").forEach((inp, i) => inp.oninput = () => { const a = (ex.answers[q.id] || q.fields.map(() => "")).slice(); a[i] = inp.value; setAns(q, a); });
   } else if (q.type === "match") {
     const vals = v || q.items.map(() => "");
@@ -975,6 +1324,13 @@ function renderAnswer(q) {
     const mv = (i, j) => { const o = ord.slice(); [o[i], o[j]] = [o[j], o[i]]; setAns(q, { order: o, touched: true }); renderAnswer(q); const b = box.querySelector(`[data-${j < i ? "u" : "d"}="${j}"]`) || box.querySelector(`li:nth-child(${j + 1}) button`); if (b) b.focus(); };
     box.querySelectorAll("[data-u]").forEach(b => b.onclick = () => mv(+b.dataset.u, +b.dataset.u - 1));
     box.querySelectorAll("[data-d]").forEach(b => b.onclick = () => mv(+b.dataset.d, +b.dataset.d + 1));
+  } else if (q.type === "quiz") {
+    const vals = v || q.subs.map(() => null);
+    box.innerHTML = q.subs.map((u, i) => `<fieldset class="sub"><legend><span class="sn">${i + 1}.</span> ${u.q}</legend>${u.options.map((o, j) => `<label class="opt ${vals[i] === j ? "on" : ""}"><input type="radio" name="q-${q.id}-${i}" id="o-${q.id}-${i}-${j}" value="${j}" ${vals[i] === j ? "checked" : ""}><span>${o}</span></label>`).join("")}</fieldset>`).join("");
+    box.querySelectorAll("fieldset").forEach((fs, i) => fs.querySelectorAll("input").forEach(inp => inp.onchange = () => {
+      const a = (ex.answers[q.id] || q.subs.map(() => null)).slice(); a[i] = +inp.value; setAns(q, a);
+      fs.querySelectorAll(".opt").forEach(l => l.classList.toggle("on", l.querySelector("input").checked));
+    }));
   } else if (q.type === "open") {
     box.innerHTML = `<label class="hint" for="t-${q.id}">Rédige ta réponse en phrases complètes. Montre tes calculs.</label><textarea id="t-${q.id}" placeholder="Ta réponse…">${esc(v || "")}</textarea>`;
     box.querySelector("textarea").oninput = e => setAns(q, e.target.value);
@@ -988,6 +1344,7 @@ function showMine(q, v) {
   if (q.type === "num") { const r = gradeAuto(q, v); return `<ul>${q.fields.map((f, i) => `<li>${f.label} ${esc(v[i] || "—")} <span class="${r.oks[i] ? "ok" : "ko"}">${r.oks[i] ? "✓" : "✗"}</span></li>`).join("")}</ul>`; }
   if (q.type === "match") { const r = gradeAuto(q, v); return `<ul>${q.items.map((it, i) => `<li>${it.left} → ${esc(v[i] || "—")} <span class="${r.oks[i] ? "ok" : "ko"}">${r.oks[i] ? "✓" : "✗"}</span></li>`).join("")}</ul>`; }
   if (q.type === "order") return (v.order || q.start).map(k => esc(q.items[k])).join(" → ");
+  if (q.type === "quiz") { const r = gradeAuto(q, v); return `<ol>${q.subs.map((u, i) => `<li>${v[i] == null ? "—" : u.options[v[i]]} <span class="${r.oks[i] ? "ok" : "ko"}">${r.oks[i] ? "✓" : "✗"}</span></li>`).join("")}</ol>`; }
   if (q.type === "open") return esc(v).replace(/\n/g, "<br>");
 }
 function showRight(q) {
@@ -996,7 +1353,8 @@ function showRight(q) {
   if (q.type === "num") return `<ul>${q.fields.map(f => `<li>${f.label} <b>${f.show}</b></li>`).join("")}</ul>`;
   if (q.type === "match") return `<ul>${q.items.map(it => `<li>${it.left} → <b>${esc(it.answer)}</b></li>`).join("")}</ul>`;
   if (q.type === "order") return q.items.map(esc).join(" → ");
-  if (q.type === "open") return esc(q.model);
+  if (q.type === "quiz") return `<ol>${q.subs.map(u => `<li>${u.options[u.answer]}</li>`).join("")}</ol>`;
+  if (q.type === "open") return esc(q.model).replace(/\n/g, "<br>");
 }
 function renderResults() {
   clearInterval(timer);
@@ -1022,6 +1380,8 @@ function renderResults() {
     return `<article class="rq ${cls}">
       <div class="top2"><b>Question ${i + 1}</b><span class="chip">${esc(q.theme)}</span><span class="pts">${self && typeof g.pts !== "number" ? "?" : fmt(p, 1)} / ${fmt(q.pts, 1)}</span></div>
       <div class="prompt">${q.prompt}</div>${q.figure || ""}
+      ${q.audio ? `<details class="tr"><summary>Transcription du document audio</summary><p lang="nl">${esc(q.audio.text).replace(/ \.\.\. /g, "<br>")}</p></details>` : ""}
+      ${q.type === "quiz" ? `<ol class="subq">${q.subs.map(u => `<li>${u.q}</li>`).join("")}</ol>` : ""}
       <div class="ans"><div class="mine"><h4>Ta réponse</h4>${showMine(q, ex.answers[q.id])}</div><div class="right"><h4>${q.type === "open" ? "Réponse modèle" : "Bonne réponse"}</h4>${showRight(q)}</div></div>
       ${q.type === "open" && g.by === "ai" ? `<p class="redpen">${esc(g.feedback)}</p>` : ""}
       ${self ? `<div class="self"><span>${g.err && typeof g.err === "string" ? esc(g.err) + " " : ""}Ta note :</span>${[0, q.pts / 2, q.pts].map(v => `<button class="btn small" data-self="${q.id}" data-v="${v}" aria-pressed="${g.pts === v}">${fmt(v, 1)} pt</button>`).join("")}</div>` : ""}
